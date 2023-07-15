@@ -68,7 +68,7 @@ export const StandbyGame: FC<Props> = (props) => {
         };
       }
     }
-  }, []);
+  }, [userNum]);
 
   const startGame = function () {
     // ゲームを開始するとき

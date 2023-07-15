@@ -80,10 +80,6 @@ export const Questioner: FC<Props> = (props) => {
   const [status, setStatus] = useState<QuestionerState>(QuestionerState.SubmittingQuestion);
 
   useEffect(() => {
-    setAnswererNum(joinNum);
-  }, [joinNum])
-
-  useEffect(() => {
     console.log(answerers);
     let judgedCnt = answerers.reduce((cnt: number, answerer: Answerer) => {
       return cnt + (answerer.isJudged ? 1 : 0)
