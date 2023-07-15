@@ -170,7 +170,15 @@ func (r *Room) getDescriptions() {
 
 func (r *Room) sendDescription(index int) {
 	r.context.StartAnswering(index)
-	message := RoomMessage{Command: CmdRoomDescription, Content: RoomDescription{Description: r.context.Descriptions[index], Index: index}}
+	message := RoomMessage{
+		Command: CmdRoomDescription, 
+		Content: RoomDescription{
+			Topic: r.context.GetTopic(),
+			Question: r.context.Question,
+			Description: r.context.Descriptions[index], 
+			Index: index,
+		},
+	}
 	r.broadCast(&message)
 }
 

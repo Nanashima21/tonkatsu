@@ -192,6 +192,8 @@ func (client *client) listenRoom(wg *sync.WaitGroup) {
 				err := client.writeJSONWithLog(&model.WSMessageToSend{
 					Command: model.WSCmdSendDescription,
 					Content: model.SendDescription{
+						Topic: description.Topic,
+						Question: description.Question,
 						Description: description.Description,
 						Index:       description.Index,
 					},

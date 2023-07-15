@@ -50,6 +50,8 @@ type RoomUsers []string
 type RoomQuestioner model.UserID
 
 type RoomDescription struct {
+	Topic       string
+	Question    string
 	Description string
 	Index       int
 }
