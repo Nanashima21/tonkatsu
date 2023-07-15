@@ -313,6 +313,9 @@ func (r *Room) close() {
 			Content: nil,
 		})
 	}
+	for _, client := range r.clients {
+		close(client.sender)
+	}
 	ra.deleteRoom(r.id)
 }
 

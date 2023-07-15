@@ -40,8 +40,13 @@ func newClient(
 }
 
 func (client *client) listenWS(wg *sync.WaitGroup) {
-	// TODO
 	defer wg.Done()
+	// closeしたsenderに送ったらpanicするのでrecoverする
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Fprintf(os.Stderr, "panic: %v\n", err)
+		}
+	}()
 	defer func() {
 		client.sender <- &ClientMessage{
 			Command: CmdClientDisconnect,
@@ -246,6 +251,7 @@ func (client *client) listenRoom(wg *sync.WaitGroup) {
 				if err != nil {
 					return
 				}
+				close(client.sender)
 			default:
 				fmt.Fprintf(os.Stderr, "[ERR]Client (id:%d) received an undefined message: %v", client.id, m)
 			}
