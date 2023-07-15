@@ -34,6 +34,7 @@ func InitRouter() *gin.Engine {
 	r.GET("/hello_world", api.Session, api.GetHelloWorld)
 	r.POST("/account", api.Account)
 	r.POST("/login", api.Login)
+	r.POST("/logout", api.Session, api.Logout)
 	r.POST("/room", api.Session, api.CreateRoom)
 	r.GET("/ws", api.Session, api.WebSocket)
 	r.POST("/chatgpt", api.Session, api.ChatGPT)

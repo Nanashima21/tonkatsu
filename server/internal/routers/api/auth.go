@@ -55,6 +55,18 @@ func Login(ctx *gin.Context) {
 	ctx.Status(http.StatusOK)
 }
 
+// ログアウト
+func Logout(ctx *gin.Context) {
+	err := session.BreakSession(ctx)
+	if err != nil {
+		ctx.Status(http.StatusInternalServerError)
+		return
+	} else {
+		ctx.Status(http.StatusOK)
+		return
+	}
+}
+
 // ログイン状態かどうかを確認するミドルウェア
 // session.GetUserIdが使えるようになる
 func Session(ctx *gin.Context) {

@@ -94,5 +94,17 @@ func UpdateSession(ctx *gin.Context) error {
 }
 
 func BreakSession(ctx *gin.Context) error {
+	sessionId, err := ctx.Cookie(sCookieName)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return err
+	}
+	_, ok := GetUserId(ctx)
+	if !ok {
+		return fmt.Errorf("Cannot get user id")
+	}
+	slock.Lock()
+	delete(s, sessionId)
+	slock.Unlock()
 	return nil
 }
