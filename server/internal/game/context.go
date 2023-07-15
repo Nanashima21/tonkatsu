@@ -69,6 +69,10 @@ func (ctx *Context) SetQuestion(question string) {
 
 }
 
+func (ctx *Context) GetTopic() string {
+	return ctx.topic
+}
+
 func (ctx *Context) CurrentTurn() uint {
 	return ctx.turn
 }

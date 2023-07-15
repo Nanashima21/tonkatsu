@@ -37,6 +37,8 @@ type SendRole struct {
 }
 
 type SendDescription struct {
+	Topic       string `json:"topic"`
+	Question    string `json:"question"`
 	Description string `json:"description"`
 	Index       int    `json:"index"`
 }
