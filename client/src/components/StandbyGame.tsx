@@ -18,8 +18,8 @@ export const StandbyGame: FC<Props> = (props) => {
   console.log(isOwner);
   const socketRef = props.socketRef;
   const [userNames, setUserNames] = useState<string[]>([]);
-  // const [userNum, setUserNum] = useState<number>(2);
-  var userNum = 2;
+  const [userNum, setUserNum] = useState<number>(2);
+  // var userNum = 2;
   const navigate = useNavigate();
   var flag = 0;
 
@@ -53,7 +53,8 @@ export const StandbyGame: FC<Props> = (props) => {
             case "update_members":
               console.log(msg["content"]["user_name"]);
               setUserNames(msg["content"]["user_name"]);
-              userNum =  msg["content"]["user_name"].length
+              setUserNum(msg["content"]["user_name"].length);
+              //userNum =  msg["content"]["user_name"].length
               break;
             case "role":
               dispatch(setJoinNum(userNum));

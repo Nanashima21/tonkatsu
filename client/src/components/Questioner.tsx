@@ -7,6 +7,7 @@ import styled from "styled-components";
 import { GameState, ResultJson } from "../views/Game";
 import { Explanation, DescriptionList, CorrectUserList } from "./GameComponents";
 import { useSelector } from "react-redux";
+import { Answerer } from "./Answerer";
 
 type Props = {
   socketRef: React.MutableRefObject<WebSocket | undefined>;
@@ -27,6 +28,7 @@ type Answerer = {
   user: string;
   answer: string;
   isCorrect: number;
+  isJudged: boolean;
 };
 
 const QuestionerState = {
@@ -67,7 +69,6 @@ export const Questioner: FC<Props> = (props) => {
 
   const joinNum = useSelector((state: any) => state.user.joinNum);
   const allAnswererNum = joinNum - 1;
-  console.log(allAnswererNum);
   const [answererNum, setAnswererNum] = useState<number>(allAnswererNum);
 
   const [topic, setTopic] = useState(topics[rand()]);
@@ -77,6 +78,29 @@ export const Questioner: FC<Props> = (props) => {
   const [correctUserList, setCorrectUserList] = useState<string[]>([]);
 
   const [status, setStatus] = useState<QuestionerState>(QuestionerState.SubmittingQuestion);
+
+  useEffect(() => {
+    setAnswererNum(joinNum);
+  }, [joinNum])
+
+  useEffect(() => {
+    console.log(answerers);
+    let judgedCnt = answerers.reduce((cnt: number, answerer: Answerer) => {
+      return cnt + (answerer.isJudged ? 1 : 0)
+    }, 0);
+    let CorrectCnt = answerers.reduce((cnt: number, answerer: Answerer) => {
+      return cnt + (answerer.isCorrect == 1 ? 1 : 0)
+    }, 0);
+    console.log(judgedCnt, CorrectCnt, answererNum);
+    if (judgedCnt == answererNum) {
+      setAnswererNum((answererNum) => answererNum - CorrectCnt)
+      var sendJsonCheck = {
+        command: "game_questioner_check",
+        content: { correctUserList },
+      };
+      socketRef.current?.send(JSON.stringify(sendJsonCheck));
+    }  
+  }, [answerers])
 
   // WebSocket
   useEffect(() => {
@@ -104,6 +128,7 @@ export const Questioner: FC<Props> = (props) => {
               const args: Answerer = {
                 ...msg["content"],
                 isCorrect: 0,
+                isJudged: false,
               };
               setAnswerers((answerers) => answerers.concat(args));
               break;
@@ -141,35 +166,26 @@ export const Questioner: FC<Props> = (props) => {
 
   const judge = (flag: boolean, ans: Answerer) => {
     let idx = 0;
-    let judgedCnt = 0;
     for (const [index, answerer] of answerers.entries()) {
       if (ans.user == answerer.user) idx = index;
-      if (answerer.isCorrect != 0) judgedCnt++;
     }
-    const array = answerers;
-    array[idx].isCorrect = flag ? 1 : 2;
-    judgedCnt++;
-    setAnswerers([...array]);
-    console.log(answererNum);
+    setAnswerers((answerers) => {
+      answerers[idx].isJudged = true;
+      answerers[idx].isCorrect = flag ? 1 : 2
+      return [...answerers];
+    });
 
-    // 全員の解答の正誤判定が終わったら
-    if (judgedCnt == answerers.length) {
-      const correctUserList: string[] = [];
-      let correctCount = 0;
-      for (const answerer of answerers) {
-        if (answerer.isCorrect == 1) {
-          correctUserList.push(answerer.user);
-          correctCount++;
-        }
-      }
-      console.log(correctCount, answererNum);
-      setAnswererNum((answererNum) => answererNum - correctCount);
-      var sendJsonCheck = {
-        command: "game_questioner_check",
-        content: { correctUserList },
-      };
-      socketRef.current?.send(JSON.stringify(sendJsonCheck));
-    }
+    if (flag) setCorrectUserList((CorrectUserList) => CorrectUserList.concat(ans.user));
+
+    // // 全員の解答の正誤判定が終わったら
+    // if (judgedCnt == answerers.length) {
+    //   console.log(answererNum, judgedCnt)
+    //   var sendJsonCheck = {
+    //     command: "game_questioner_check",
+    //     content: { correctUserList },
+    //   };
+    //   socketRef.current?.send(JSON.stringify(sendJsonCheck));
+    // }
   };
 
   const next_explanation = () => {
