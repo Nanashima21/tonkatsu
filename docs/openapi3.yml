@@ -44,6 +44,13 @@ paths:
           description: OK
         '401':
           description: NG
+  /logout:
+    post:
+      responses:
+        '200':
+          description: Succeeded to log out
+        '401':
+          description: Not yet logged in
   /room:
     post:
       responses:
