@@ -131,6 +131,7 @@ func (client *client) listenWS(wg *sync.WaitGroup) {
 func (client *client) listenRoom(wg *sync.WaitGroup) {
 	defer wg.Done()
 	defer func() {
+		close(client.sender)
 		client.left.Store(true)
 	}()
 
@@ -251,7 +252,6 @@ func (client *client) listenRoom(wg *sync.WaitGroup) {
 				if err != nil {
 					return
 				}
-				close(client.sender)
 			default:
 				fmt.Fprintf(os.Stderr, "[ERR]Client (id:%d) received an undefined message: %v", client.id, m)
 			}
