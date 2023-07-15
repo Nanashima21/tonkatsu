@@ -76,7 +76,7 @@ export const Answerer: FC<Props> = (props) => {
           switch (msg["command"]) {
             case "game_description":
               if (isCorrect) {
-                props.setGameState(GameState.Questioner);
+                props.setGameState(GameState.AnsweredAnswerer);
                 break;
               }
               setExplanations(explanations.concat(msg["content"]));
