@@ -131,6 +131,12 @@ func (client *client) listenWS(wg *sync.WaitGroup) {
 func (client *client) listenRoom(wg *sync.WaitGroup) {
 	defer wg.Done()
 	defer func() {
+		if err := recover(); err != nil {
+			fmt.Fprintln(os.Stderr, "panic occurred in client.listenRoom")
+			fmt.Fprintf(os.Stderr, "panic: %v\n", err)
+		}
+	}()
+	defer func() {
 		close(client.sender)
 		client.left.Store(true)
 	}()
