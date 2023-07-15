@@ -51,6 +51,8 @@ export const LoginedHome = () => {
           const jsonObj = JSON.parse(xmlHttpRequest.responseText);
           dispatch(createRoom(jsonObj.roomId));
           dispatch(becomeOwner(true));
+        } else if (xmlHttpRequest.status == 401) {
+          navigate("/login");
         }
       }
       roomSuccess();
