@@ -16,7 +16,7 @@ type Props = {
   moveError: () => void;
   isQuestioner: boolean;
   explanations: Explanation[];
-  setExplanations: (state: Explanation[]) => Explanation[];
+  setExplanations: (state: Explanation[]) => void;
 };
 
 type Topic = {

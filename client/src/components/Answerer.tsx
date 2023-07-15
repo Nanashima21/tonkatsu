@@ -22,7 +22,7 @@ type Props = {
   moveResult: (json: ResultJson) => void;
   moveError: () => void;
   explanations: Explanation[];
-  setExplanations: (state: Explanation[]) => Explanation[];
+  setExplanations: (state: Explanation[]) => void;
 };
 
 type Topic = {
