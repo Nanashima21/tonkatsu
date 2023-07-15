@@ -14,7 +14,9 @@ type Props = {
   setGameState: (state: GameState) => void;
   moveResult: (json: ResultJson) => void;
   moveError: () => void;
-  isQuestioner: boolean
+  isQuestioner: boolean;
+  explanations: Explanation[];
+  setExplanations: (state: Explanation[]) => Explanation[];
 };
 
 type Topic = {
@@ -69,7 +71,6 @@ export const Questioner: FC<Props> = (props) => {
     return Math.floor(Math.random() * topics.length);
   };
 
-  const navigate = useNavigate();
   const socketRef = props.socketRef;
   var flag = 0;
 
@@ -79,7 +80,6 @@ export const Questioner: FC<Props> = (props) => {
 
   const [topic, setTopic] = useState(topics[rand()]);
   const [question, setQuestion] = useState("");
-  const [explanations, setExplanations] = useState<Explanation[]>([]);
   const [answerers, setAnswerers] = useState<Answerer[]>(() => []);
   const [correctUserList, setCorrectUserList] = useState<string[]>([]);
 
@@ -128,7 +128,7 @@ export const Questioner: FC<Props> = (props) => {
             case "game_description":
               setAnswerers(() => []);
               setCorrectUserList(() => []);
-              setExplanations((explanations) => explanations.concat(msg["content"]));
+              props.setExplanations(props.explanations.concat(msg["content"]));
               setStatus(QuestionerState.JudgingAnswer);
               break;
             case "game_questioner_recieve":
@@ -144,6 +144,7 @@ export const Questioner: FC<Props> = (props) => {
               setStatus(QuestionerState.Result);
               break;
             case "game_show_result":
+              props.setExplanations([]);
               props.moveResult(msg);
               break;
             case "game_disconnect":
@@ -153,7 +154,7 @@ export const Questioner: FC<Props> = (props) => {
         };
       }
     }
-  }, []);
+  }, [props.explanations]);
 
   // 質問をランダムで返す
   useEffect(() => {
@@ -260,7 +261,7 @@ export const Questioner: FC<Props> = (props) => {
                 <p>質問：{topic}</p>
                 <p>送信したお題：{question}</p>
                 <p>
-                  {explanations.map((explanation, i) => (
+                  {props.explanations.map((explanation, i) => (
                     <div align="left">
                     <p key={i}>
                       {explanation.description}

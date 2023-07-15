@@ -21,6 +21,8 @@ type Props = {
   setGameState: (state: GameState) => void;
   moveResult: (json: ResultJson) => void;
   moveError: () => void;
+  explanations: Explanation[];
+  setExplanations: (state: Explanation[]) => Explanation[];
 };
 
 type Topic = {
@@ -51,7 +53,6 @@ export const Answerer: FC<Props> = (props) => {
   const socketRef = props.socketRef;
   var flag = 0;
   const [status, setStatus] = useState<AnswerState>(AnswerState.WaitQuestionerAnswer);
-  const [explanations, setExplanations] = useState<Explanation[]>([]);
   const [answer, setAnswer] = useState("");
   const [userid, setUserid, removeUserid] = useCookies(["userID"]);
   const [correctUserList, setCorrectUserList] = useState<string[]>([]);
@@ -74,11 +75,11 @@ export const Answerer: FC<Props> = (props) => {
           var msg = JSON.parse(event.data);
           switch (msg["command"]) {
             case "game_description":
+              props.setExplanations(props.explanations.concat(msg["content"]));
               if (isCorrect) {
                 props.setGameState(GameState.AnsweredAnswerer);
                 break;
               }
-              setExplanations(explanations.concat(msg["content"]));
               setStatus(AnswerState.SubmittingAnswer);
               break;
             case "game_answerer_checked":
@@ -90,6 +91,7 @@ export const Answerer: FC<Props> = (props) => {
               setStatus(AnswerState.Result);
               break;
             case "game_show_result":
+              props.setExplanations([]);
               props.moveResult(msg);
               break;
             case "game_disconnect":
@@ -99,7 +101,7 @@ export const Answerer: FC<Props> = (props) => {
         };
       }
     }
-  }, [isCorrect]);
+  }, [isCorrect, props.explanations]);
 
   const onSubmit: SubmitHandler<Topic> = (data) => {
     setAnswer(data.answer);
@@ -136,7 +138,7 @@ export const Answerer: FC<Props> = (props) => {
     return (
       <>
         <StyledPage>
-          <DescriptionList explanations={explanations}></DescriptionList>
+          <DescriptionList explanations={props.explanations}></DescriptionList>
           <StyledForm>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div>
@@ -176,7 +178,7 @@ export const Answerer: FC<Props> = (props) => {
     return (
       <>
         <StyledPage>
-          <DescriptionList explanations={explanations}></DescriptionList>
+          <DescriptionList explanations={props.explanations}></DescriptionList>
           <p>あなたの解答</p>
           <h2>{answer}</h2>
         </StyledPage>

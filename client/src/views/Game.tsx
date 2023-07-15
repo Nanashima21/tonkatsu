@@ -7,6 +7,7 @@ import { Result } from "../components/Result";
 import { AllResult } from "../components/AllResult";
 import { Answerer } from "../components/Answerer";
 import { GameWebSocketError } from "../components/GameWebSocketError";
+import { Explanation } from "../components/GameComponents";
 import { useSelector } from "react-redux";
 
 export const GameState = {
@@ -47,6 +48,7 @@ export type AllResultJson = {
 export const Game = function () {
   const roomid = useSelector((state: any) => state.user.roomId);
   const [gameState, setGameState] = useState<GameState>(GameState.Init);
+  const [explanations, setExplanations] = useState<Explanation[]>([]);
   const [result, setResult] = useState<ResultJson>({
     command: "", 
   content: {
@@ -105,19 +107,19 @@ export const Game = function () {
     case GameState.Questioner:
       return (
         <>
-          <Questioner socketRef={socketRef} setGameState={setGameState} moveResult={moveResult} isQuestioner={true} moveError={moveError} />
+          <Questioner socketRef={socketRef} setGameState={setGameState} moveResult={moveResult} isQuestioner={true} moveError={moveError} explanations={explanations} setExplanations={setExplanations} />
         </>
       );
     case GameState.AnsweredAnswerer:
       return (
         <>
-          <Questioner socketRef={socketRef} setGameState={setGameState} moveResult={moveResult} isQuestioner={false} moveError={moveError} />
+          <Questioner socketRef={socketRef} setGameState={setGameState} moveResult={moveResult} isQuestioner={false} moveError={moveError} explanations={explanations} setExplanations={setExplanations} />
         </>
       );
     case GameState.Answerer:
       return (
         <>
-          <Answerer socketRef={socketRef} setGameState={setGameState} moveResult={moveResult} moveError={moveError} />
+          <Answerer socketRef={socketRef} setGameState={setGameState} moveResult={moveResult} moveError={moveError} explanations={explanations} setExplanations={setExplanations}/>
         </>
       );
     case GameState.Result:
