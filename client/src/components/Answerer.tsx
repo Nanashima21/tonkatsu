@@ -55,8 +55,7 @@ export const Answerer: FC<Props> = (props) => {
   const [answer, setAnswer] = useState("");
   const [userid, setUserid, removeUserid] = useCookies(["userID"]);
   const [correctUserList, setCorrectUserList] = useState<string[]>([]);
-  const [isCorrect, setIsCorrect] = useState(false);
-
+  const [isCorrect, setIsCorrect] = useState<boolean>(false);
   // WebSocket
   useEffect(() => {
     if (flag == 0) {
@@ -97,7 +96,7 @@ export const Answerer: FC<Props> = (props) => {
         };
       }
     }
-  }, []);
+  }, [isCorrect]);
 
   const onSubmit: SubmitHandler<Topic> = (data) => {
     setAnswer(data.answer);
