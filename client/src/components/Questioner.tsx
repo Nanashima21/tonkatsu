@@ -17,6 +17,10 @@ type Props = {
   isQuestioner: boolean;
   explanations: Explanation[];
   setExplanations: (state: Explanation[]) => void;
+  topic: string,
+  setTopic: (state: string) => void;
+  question: string,
+  setQuestion: (state: string) => void;
 };
 
 type Topic = {
@@ -54,23 +58,6 @@ export const Questioner: FC<Props> = (props) => {
     mode: "onChange",
   });
 
-  const topics: string[] = [
-    "好きな食べ物は？",
-    // "好きな本は？",
-    "好きな動物は？",
-    "好きなアーティストは？",
-    "好きなポケモンは？",
-    "行ってみたい国は？",
-    "旅行したい都道府県は？",
-    "好きな飲み物は？",
-    "好きなスポーツは？",
-    "嫌いな食べ物は？",
-  ];
-
-  const rand = (): number => {
-    return Math.floor(Math.random() * topics.length);
-  };
-
   const socketRef = props.socketRef;
   var flag = 0;
 
@@ -78,8 +65,6 @@ export const Questioner: FC<Props> = (props) => {
   const allAnswererNum = joinNum - 1;
   const [answererNum, setAnswererNum] = useState<number>(allAnswererNum);
 
-  const [topic, setTopic] = useState(topics[rand()]);
-  const [question, setQuestion] = useState("");
   const [answerers, setAnswerers] = useState<Answerer[]>(() => []);
   const [correctUserList, setCorrectUserList] = useState<string[]>([]);
 
@@ -128,8 +113,8 @@ export const Questioner: FC<Props> = (props) => {
             case "game_description":
               setAnswerers(() => []);
               setCorrectUserList(() => []);
-              setTopic(msg["content"]["topic"]);
-              setQuestion(msg["content"]["question"]);
+              props.setTopic(msg["content"]["topic"]);
+              props.setQuestion(msg["content"]["question"]);
               const explanationArgs: Explanation = {
                 description: msg["content"]["description"],
                 index: msg["content"]["index"],
@@ -162,17 +147,12 @@ export const Questioner: FC<Props> = (props) => {
     }
   }, [props.explanations]);
 
-  // 質問をランダムで返す
-  useEffect(() => {
-    setTopic(topics[rand()]);
-  }, []);
-
   const onSubmit: SubmitHandler<Topic> = (data) => {
-    setQuestion(data.question);
+    props.setQuestion(data.question);
     var sendJson = {
       command: "game_questioner_question",
       content: {
-        topic: data.topic,
+        topic: props.topic,
         question: data.question,
       },
     };
@@ -213,7 +193,7 @@ export const Questioner: FC<Props> = (props) => {
           <>
             <StyledPage>
               <StyledForm>
-                <p>質問：{topic}</p>
+                <p>質問：{props.topic}</p>
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <div>
                     <div>
@@ -264,8 +244,8 @@ export const Questioner: FC<Props> = (props) => {
           <StyledPage>
             <StyledScreen>
               <VStack>
-                <p>質問：{topic}</p>
-                <p>送信したお題：{question}</p>
+                <p>質問：{props.topic}</p>
+                <p>{props.isQuestioner ? "送信したお題" : "お題"} : {props.question}</p>
                 <p>
                   {props.explanations.map((explanation, i) => (
                     <div align="left">

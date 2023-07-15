@@ -23,6 +23,10 @@ type Props = {
   moveError: () => void;
   explanations: Explanation[];
   setExplanations: (state: Explanation[]) => void;
+  topic: string,
+  setTopic: (state: string) => void;
+  question: string,
+  setQuestion: (state: string) => void;
 };
 
 type Topic = {
@@ -75,7 +79,13 @@ export const Answerer: FC<Props> = (props) => {
           var msg = JSON.parse(event.data);
           switch (msg["command"]) {
             case "game_description":
-              props.setExplanations(props.explanations.concat(msg["content"]));
+              props.setTopic(msg["content"]["topic"]);
+              props.setQuestion(msg["content"]["question"]);
+              const explanationArgs: Explanation = {
+                description: msg["content"]["description"],
+                index: msg["content"]["index"],
+              }
+              props.setExplanations(props.explanations.concat(explanationArgs));
               if (isCorrect) {
                 props.setGameState(GameState.AnsweredAnswerer);
                 break;
@@ -114,11 +124,6 @@ export const Answerer: FC<Props> = (props) => {
     socketRef.current?.send(JSON.stringify(sendJson));
     setStatus(AnswerState.WaitJudge);
     reset();
-  };
-
-  const backHome = function () {
-    props.setGameState(GameState.Init);
-    navigate("/");
   };
 
   switch (status) {

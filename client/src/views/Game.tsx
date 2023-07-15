@@ -46,9 +46,30 @@ export type AllResultJson = {
 };
 
 export const Game = function () {
+  const topics: string[] = [
+    "好きな食べ物は？",
+    // "好きな本は？",
+    "好きな動物は？",
+    "好きなアーティストは？",
+    "好きなポケモンは？",
+    "行ってみたい国は？",
+    "旅行したい都道府県は？",
+    "好きな飲み物は？",
+    "好きなスポーツは？",
+    "嫌いな食べ物は？",
+  ];
+
+  const rand = (): number => {
+    return Math.floor(Math.random() * topics.length);
+  };
+
   const roomid = useSelector((state: any) => state.user.roomId);
-  const [gameState, setGameState] = useState<GameState>(GameState.Init);
+
+  const [topic, setTopic] = useState(topics[rand()]);
+  const [question, setQuestion] = useState("");
   const [explanations, setExplanations] = useState<Explanation[]>([]);
+
+  const [gameState, setGameState] = useState<GameState>(GameState.Init);
   const [result, setResult] = useState<ResultJson>({
     command: "", 
   content: {
@@ -107,19 +128,19 @@ export const Game = function () {
     case GameState.Questioner:
       return (
         <>
-          <Questioner socketRef={socketRef} setGameState={setGameState} moveResult={moveResult} isQuestioner={true} moveError={moveError} explanations={explanations} setExplanations={setExplanations} />
+          <Questioner socketRef={socketRef} setGameState={setGameState} moveResult={moveResult} isQuestioner={true} moveError={moveError} explanations={explanations} setExplanations={setExplanations} topic={topic} setTopic={setTopic} question={question} setQuestion={setQuestion} />
         </>
       );
     case GameState.AnsweredAnswerer:
       return (
         <>
-          <Questioner socketRef={socketRef} setGameState={setGameState} moveResult={moveResult} isQuestioner={false} moveError={moveError} explanations={explanations} setExplanations={setExplanations} />
+          <Questioner socketRef={socketRef} setGameState={setGameState} moveResult={moveResult} isQuestioner={false} moveError={moveError} explanations={explanations} setExplanations={setExplanations} topic={topic} setTopic={setTopic} question={question} setQuestion={setQuestion} />
         </>
       );
     case GameState.Answerer:
       return (
         <>
-          <Answerer socketRef={socketRef} setGameState={setGameState} moveResult={moveResult} moveError={moveError} explanations={explanations} setExplanations={setExplanations}/>
+          <Answerer socketRef={socketRef} setGameState={setGameState} moveResult={moveResult} moveError={moveError} explanations={explanations} setExplanations={setExplanations} topic={topic} setTopic={setTopic} question={question} setQuestion={setQuestion} />
         </>
       );
     case GameState.Result:
