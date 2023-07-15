@@ -82,6 +82,10 @@ export const Questioner: FC<Props> = (props) => {
   useEffect(() => {
     if (flag == 0) {
       flag = 1;
+      if (!props.isQuestioner) {
+        setStatus(QuestionerState.JudgingAnswer);
+      }
+
       // ソケットエラー
       if (socketRef.current) {
         socketRef.current.onerror = function () {
