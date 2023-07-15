@@ -81,6 +81,7 @@ func (r *Room) run() {
 		}
 	}
 	r.showAllResults()
+	r.finish()
 }
 
 // 待機中に送られてくるメッセージを処理する
@@ -105,7 +106,15 @@ func (r *Room) handleMessagesInWaiting() bool {
 						Command: CmdRoomUsersInRoom,
 						Content: names,
 					})
+				case CmdClientCloseRoom:
+					r.broadCast(&RoomMessage{
+						Command: CmdRoomClose,
+						Content: nil,
+					})
+					r.finish()
+					return true
 				case CmdClientStartGame:
+					r.context.GameMode = string(m.Content.(ClientMsgGameMode))
 					return false
 				default:
 				}
@@ -154,7 +163,7 @@ func (r *Room) handleMessagesFromQuestioner() {
 }
 
 func (r *Room) getDescriptions() {
-	r.context.Descriptions = chatgpt.AskChatGPT(r.context.Question)
+	r.context.Descriptions = chatgpt.AskChatGPT(r.context.Question, r.context.GameMode)
 }
 
 func (r *Room) sendDescription(index int) {
@@ -268,9 +277,7 @@ func (r *Room) handleNextGame() bool {
 					r.context.NextTurn()
 					return false
 				case CmdClientFinishGame:
-					if userId != r.context.Questioner {
-						break
-					}
+
 					return true
 				default:
 				}
@@ -295,6 +302,16 @@ func (r *Room) showAllResults() {
 	}
 	message := RoomMessage{Command: CmdRoomFinalResult, Content: results}
 	r.broadCast(&message)
+}
+
+func (r *Room) finish() {
+	idList := make([]UserID, 0, len(r.clients))
+	for id := range r.clients {
+		idList = append(idList, id)
+	}
+	for _, id := range idList {
+		r.cancelSubscribe(id)
+	}
 }
 
 func (r *Room) close() {

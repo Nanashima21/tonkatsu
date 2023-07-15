@@ -87,8 +87,11 @@ const (
 	// 退室
 	// Content: nil
 	CmdClientLeaveRoom = ClientMsgCommand(iota)
-	// ゲーム開始
+	// 部屋を閉じる
 	// Content: nil
+	CmdClientCloseRoom
+	// ゲーム開始
+	// Content: ClientMsgGameMode
 	CmdClientStartGame
 	// 出題者が問題に答えた
 	// Content: ClientMsgQuestion
@@ -112,6 +115,8 @@ const (
 	// Content: nil
 	CmdClientFinishGame
 )
+
+type ClientMsgGameMode string
 
 type ClientMsgQuestion struct {
 	topic    string

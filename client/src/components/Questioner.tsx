@@ -13,6 +13,7 @@ type Props = {
   socketRef: React.MutableRefObject<WebSocket | undefined>;
   setGameState: (state: GameState) => void;
   moveResult: (json: ResultJson) => void;
+  isQuestioner: boolean
 };
 
 type Topic = {
@@ -102,6 +103,10 @@ export const Questioner: FC<Props> = (props) => {
   useEffect(() => {
     if (flag == 0) {
       flag = 1;
+      if (!props.isQuestioner) {
+        setStatus(QuestionerState.JudgingAnswer);
+      }
+
       // ソケットエラー
       if (socketRef.current) {
         socketRef.current.onerror = function () {
@@ -202,44 +207,55 @@ export const Questioner: FC<Props> = (props) => {
   switch (status) {
 
     case QuestionerState.SubmittingQuestion:
+      if (props.isQuestioner) {
+        return (
+          <>
+            <StyledPage>
+              <StyledForm>
+                <p>質問：{topic}</p>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <div>
+                    <div>
+                      <StyledInput
+                        id="question"
+                        type="text"
+                        {...register("question", {
+                          required: "解答を入力してください",
+                          maxLength: {
+                            value: 30,
+                            message: "30文字以内で入力してください",
+                          },
+                          pattern: {
+                            value: /^[A-Za-z0-9ぁ-んーァ-ヶーｱ-ﾝﾞﾟ一-龠]+$/i,
+                            message: "入力の形式が不正です",
+                          },
+                        })}
+                      />
+                    </div>
+                    <StyledErrorMessage>
+                      <ErrorMessage
+                        errors={errors}
+                        name="question"
+                        render={({ message }) => <span>{message}</span>}
+                      />
+                    </StyledErrorMessage>
+                    <StyledButton type="submit">送信</StyledButton>
+                  </div>
+                </form>
+              </StyledForm>
+            </StyledPage>
+          </>
+        );
+      }
+
       return (
         <>
           <StyledPage>
-            <StyledForm>
-              <p>質問：{topic}</p>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <div>
-                  <div>
-                    <StyledInput
-                      id="question"
-                      type="text"
-                      {...register("question", {
-                        required: "解答を入力してください",
-                        maxLength: {
-                          value: 30,
-                          message: "30文字以内で入力してください",
-                        },
-                        pattern: {
-                          value: /^[A-Za-z0-9ぁ-んーァ-ヶーｱ-ﾝﾞﾟ一-龠]+$/i,
-                          message: "入力の形式が不正です",
-                        },
-                      })}
-                    />
-                  </div>
-                  <StyledErrorMessage>
-                    <ErrorMessage
-                      errors={errors}
-                      name="question"
-                      render={({ message }) => <span>{message}</span>}
-                    />
-                  </StyledErrorMessage>
-                  <StyledButton type="submit">送信</StyledButton>
-                </div>
-              </form>
-            </StyledForm>
+            <h3>待機中...</h3>
           </StyledPage>
         </>
       );
+
     
     case QuestionerState.JudgingAnswer:
       return (
@@ -261,27 +277,37 @@ export const Questioner: FC<Props> = (props) => {
                 {answerers.map((answerer, i) => (
                   <HStack key={i}>
                     <p>{answerer.user}:</p>
-                    {answerer.isCorrect != 0 ? (
+                    {props.isQuestioner ? (
+                      // 出題者
                       <>
-                        <StyledAnswer>
-                          {answerer.isCorrect == 1 ? "正解！" : "不正解..."}
-                        </StyledAnswer>
+                        {answerer.isCorrect != 0 ? (
+                          <>
+                            <StyledAnswer>
+                              {answerer.isCorrect == 1 ? "正解！" : "不正解..."}
+                            </StyledAnswer>
+                          </>
+                        ) : (
+                          <>
+                            <StyledAnswer>{answerer.answer}</StyledAnswer>
+                            <StyledQuizButton
+                              onClick={() => judge(true, answerer)}
+                              color="#98FB98"
+                            >
+                              o
+                            </StyledQuizButton>
+                            <StyledQuizButton
+                              onClick={() => judge(false, answerer)}
+                              color="#FA8072"
+                            >
+                              x
+                            </StyledQuizButton>
+                          </>
+                        )}
                       </>
                     ) : (
+                      // 正解した解答者
                       <>
                         <StyledAnswer>{answerer.answer}</StyledAnswer>
-                        <StyledQuizButton
-                          onClick={() => judge(true, answerer)}
-                          color="#98FB98"
-                        >
-                          o
-                        </StyledQuizButton>
-                        <StyledQuizButton
-                          onClick={() => judge(false, answerer)}
-                          color="#FA8072"
-                        >
-                          x
-                        </StyledQuizButton>
                       </>
                     )}
                   </HStack>
@@ -293,24 +319,35 @@ export const Questioner: FC<Props> = (props) => {
       );
   
     case QuestionerState.Result:
+      if (props.isQuestioner) {
+        return (
+          <>
+            <StyledPage>
+              <CorrectUserList correctUsers={correctUserList}></CorrectUserList>
+              <StyledHr />
+              <HStack>
+                { answererNum > 0 ? (
+                  <StyledButton onClick={next_explanation}>
+                    次の説明に移る
+                  </StyledButton>
+                ):(<></>) }
+                <StyledButton onClick={question_done}>
+                  この問題を終了する
+                </StyledButton>
+              </HStack>
+            </StyledPage>
+          </>
+        );
+      }
+
       return (
         <>
           <StyledPage>
             <CorrectUserList correctUsers={correctUserList}></CorrectUserList>
-            <StyledHr />
-            <HStack>
-              { answererNum > 0 ? (
-                <StyledButton onClick={next_explanation}>
-                  次の説明に移る
-                </StyledButton>
-              ):(<></>) }
-              <StyledButton onClick={question_done}>
-                この問題を終了する
-              </StyledButton>
-            </HStack>
           </StyledPage>
         </>
       );
+
 
     // chatGPT の回答待ち  
     case QuestionerState.Wait:

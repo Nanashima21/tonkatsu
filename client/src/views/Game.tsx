@@ -11,9 +11,10 @@ export const GameState = {
   Init: 0,
   Standby: 1,
   Questioner: 2,
-  Answerer: 3,
-  Result: 4,
-  AllResult: 5,
+  AnsweredAnswerer: 3,
+  Answerer: 4,
+  Result: 5,
+  AllResult: 6,
 };
 
 export type GameState = (typeof GameState)[keyof typeof GameState];
@@ -92,7 +93,13 @@ export const Game = function () {
     case GameState.Questioner:
       return (
         <>
-          <Questioner socketRef={socketRef} setGameState={setGameState} moveResult={moveResult}/>
+          <Questioner socketRef={socketRef} setGameState={setGameState} moveResult={moveResult} isQuestioner={true} />
+        </>
+      );
+    case GameState.AnsweredAnswerer:
+      return (
+        <>
+          <Questioner socketRef={socketRef} setGameState={setGameState} moveResult={moveResult} isQuestioner={false} />
         </>
       );
     case GameState.Answerer:

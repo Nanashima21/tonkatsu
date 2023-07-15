@@ -22,6 +22,7 @@ export const StandbyGame: FC<Props> = (props) => {
   // var userNum = 2;
   const navigate = useNavigate();
   var flag = 0;
+  const [gameMode, setGameMode] = useState("normal");
 
   // status:
   // 0: WebSocket 接続前
@@ -56,6 +57,12 @@ export const StandbyGame: FC<Props> = (props) => {
               setUserNum(msg["content"]["user_name"].length);
               //userNum =  msg["content"]["user_name"].length
               break;
+            case "close_room":
+              localStorage.removeItem("isOwner");
+              socketRef.current?.close();
+              props.setGameState(GameState.Init);
+              navigate("/");
+              break;
             case "role":
               dispatch(setJoinNum(userNum));
               if (msg["content"]["isQuestioner"])
@@ -72,12 +79,14 @@ export const StandbyGame: FC<Props> = (props) => {
 
   const startGame = function () {
     // ゲームを開始するとき
-    var sendJson = { command: "start_game" };
+    var sendJson = { command: "start_game", content: { game_mode: gameMode} };
     socketRef.current?.send(JSON.stringify(sendJson));
   };
 
   const cancelGame = function () {
     // ゲームをキャンセルするとき
+    let sendJSON = { command: "close_room" }
+    socketRef.current?.send(JSON.stringify(sendJSON))
     localStorage.removeItem("isOwner");
     socketRef.current?.close();
     props.setGameState(GameState.Init);
@@ -135,6 +144,71 @@ export const StandbyGame: FC<Props> = (props) => {
         <StyledPage>
           <h2>部屋 ID</h2>
           <h1>{roomid}</h1>
+          <div>
+            <label>
+              <input
+                type="radio"
+                value="easy"
+                checked={gameMode === "easy"}
+                onChange={() => {
+                  setGameMode("easy");
+                }}
+              />
+              Easy
+            </label>
+          </div>
+          <div>
+            <label>
+              <input
+                type="radio"
+                value="normal"
+                checked={gameMode === "normal"}
+                onChange={() => {
+                  setGameMode("normal");
+                }}
+              />
+              Normal
+            </label>
+          </div>
+          <div>
+            <label>
+              <input
+                type="radio"
+                value="hard"
+                checked={gameMode === "hard"}
+                onChange={() => {
+                  setGameMode("hard");
+                }}
+              />
+              Hard
+            </label>
+          </div>
+          <div>
+            <label>
+              <input
+                type="radio"
+                value="english"
+                checked={gameMode === "english"}
+                onChange={() => {
+                  setGameMode("english");
+                }}
+              />
+              English
+            </label>
+          </div>
+          <div>
+            <label>
+              <input
+                type="radio"
+                value="chinese"
+                checked={gameMode === "chinese"}
+                onChange={() => {
+                  setGameMode("chinese");
+                }}
+              />
+              Chinese
+            </label>
+          </div>
           <div>
             <StyledButton onClick={startGame}>ゲームを始める</StyledButton>
           </div>

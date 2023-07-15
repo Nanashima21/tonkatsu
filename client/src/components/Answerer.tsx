@@ -55,8 +55,7 @@ export const Answerer: FC<Props> = (props) => {
   const [answer, setAnswer] = useState("");
   const [userid, setUserid, removeUserid] = useCookies(["userID"]);
   const [correctUserList, setCorrectUserList] = useState<string[]>([]);
-  const [isCorrect, setIsCorrect] = useState(false);
-
+  const [isCorrect, setIsCorrect] = useState<boolean>(false);
   // WebSocket
   useEffect(() => {
     if (flag == 0) {
@@ -76,7 +75,7 @@ export const Answerer: FC<Props> = (props) => {
           switch (msg["command"]) {
             case "game_description":
               if (isCorrect) {
-                props.setGameState(GameState.Questioner);
+                props.setGameState(GameState.AnsweredAnswerer);
                 break;
               }
               setExplanations(explanations.concat(msg["content"]));
@@ -97,7 +96,7 @@ export const Answerer: FC<Props> = (props) => {
         };
       }
     }
-  }, []);
+  }, [isCorrect]);
 
   const onSubmit: SubmitHandler<Topic> = (data) => {
     setAnswer(data.answer);
