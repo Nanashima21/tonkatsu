@@ -128,16 +128,22 @@ export const Questioner: FC<Props> = (props) => {
             case "game_description":
               setAnswerers(() => []);
               setCorrectUserList(() => []);
-              props.setExplanations(props.explanations.concat(msg["content"]));
+              setTopic(msg["content"]["topic"]);
+              setQuestion(msg["content"]["question"]);
+              const explanationArgs: Explanation = {
+                description: msg["content"]["description"],
+                index: msg["content"]["index"],
+              }
+              props.setExplanations(props.explanations.concat(explanationArgs));
               setStatus(QuestionerState.JudgingAnswer);
               break;
             case "game_questioner_recieve":
-              const args: Answerer = {
+              const answererArgs: Answerer = {
                 ...msg["content"],
                 isCorrect: 0,
                 isJudged: false,
               };
-              setAnswerers((answerers) => answerers.concat(args));
+              setAnswerers((answerers) => answerers.concat(answererArgs));
               break;
             case "game_answerer_checked":
               setCorrectUserList(msg["content"]["correctUserList"]);
