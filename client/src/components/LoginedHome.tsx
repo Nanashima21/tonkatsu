@@ -63,6 +63,15 @@ export const LoginedHome = () => {
 
   const logout = () => {
     removeCookie("userID");
+    const xmlHttpRequest = new XMLHttpRequest();
+    xmlHttpRequest.withCredentials = true;
+    let url = "http://localhost:8000/logout";
+    xmlHttpRequest.open("POST", url);
+    xmlHttpRequest.send()
+
+    xmlHttpRequest.onreadystatechange = () => {
+      navigate("/")
+    }
   };
 
   return (
