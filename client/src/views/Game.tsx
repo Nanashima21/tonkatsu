@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { StandbyGame } from "../components/StandbyGame";
 import { Questioner } from "../components/Questioner";
 import { Result } from "../components/Result";
@@ -59,6 +60,7 @@ export const Game = function () {
   }
   });
 
+  const navigate = useNavigate();
   const socketRef = React.useRef<WebSocket>();
   var flag = 0;
 
@@ -68,6 +70,9 @@ export const Game = function () {
       flag = 1;
       setGameState(GameState.Standby);
       var socket = new WebSocket("ws://localhost:8000/ws?roomid=" + roomid);
+      socket.onerror = () => {
+        navigate("/login");
+      }
       socketRef.current = socket;
       console.log("SocketRef OK");
     }
