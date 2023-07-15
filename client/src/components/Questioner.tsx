@@ -7,11 +7,13 @@ import styled from "styled-components";
 import { GameState, ResultJson } from "../views/Game";
 import { Explanation, DescriptionList, CorrectUserList } from "./GameComponents";
 import { useSelector } from "react-redux";
+import { Answerer } from "./Answerer";
 
 type Props = {
   socketRef: React.MutableRefObject<WebSocket | undefined>;
   setGameState: (state: GameState) => void;
   moveResult: (json: ResultJson) => void;
+  isQuestioner: boolean
 };
 
 type Topic = {
@@ -27,6 +29,7 @@ type Answerer = {
   user: string;
   answer: string;
   isCorrect: number;
+  isJudged: boolean;
 };
 
 const QuestionerState = {
@@ -72,15 +75,38 @@ export const Questioner: FC<Props> = (props) => {
   const [topic, setTopic] = useState(topics[rand()]);
   const [question, setQuestion] = useState("");
   const [explanations, setExplanations] = useState<Explanation[]>([]);
-  const [answerers, setAnswerers] = useState<Answerer[]>([]);
+  const [answerers, setAnswerers] = useState<Answerer[]>(() => []);
   const [correctUserList, setCorrectUserList] = useState<string[]>([]);
 
   const [status, setStatus] = useState<QuestionerState>(QuestionerState.SubmittingQuestion);
+
+  useEffect(() => {
+    console.log(answerers);
+    let judgedCnt = answerers.reduce((cnt: number, answerer: Answerer) => {
+      return cnt + (answerer.isJudged ? 1 : 0)
+    }, 0);
+    let CorrectCnt = answerers.reduce((cnt: number, answerer: Answerer) => {
+      return cnt + (answerer.isCorrect == 1 ? 1 : 0)
+    }, 0);
+    console.log(judgedCnt, CorrectCnt, answererNum);
+    if (judgedCnt == answererNum) {
+      setAnswererNum((answererNum) => answererNum - CorrectCnt)
+      var sendJsonCheck = {
+        command: "game_questioner_check",
+        content: { correctUserList },
+      };
+      socketRef.current?.send(JSON.stringify(sendJsonCheck));
+    }  
+  }, [answerers])
 
   // WebSocket
   useEffect(() => {
     if (flag == 0) {
       flag = 1;
+      if (!props.isQuestioner) {
+        setStatus(QuestionerState.JudgingAnswer);
+      }
+
       // ソケットエラー
       if (socketRef.current) {
         socketRef.current.onerror = function () {
@@ -95,15 +121,18 @@ export const Questioner: FC<Props> = (props) => {
           var msg = JSON.parse(event.data);
           switch (msg["command"]) {
             case "game_description":
-              setExplanations(explanations.concat(msg["content"]));
+              setAnswerers(() => []);
+              setCorrectUserList(() => []);
+              setExplanations((explanations) => explanations.concat(msg["content"]));
               setStatus(QuestionerState.JudgingAnswer);
               break;
             case "game_questioner_recieve":
               const args: Answerer = {
                 ...msg["content"],
                 isCorrect: 0,
+                isJudged: false,
               };
-              setAnswerers(answerers.concat(args));
+              setAnswerers((answerers) => answerers.concat(args));
               break;
             case "game_answerer_checked":
               setCorrectUserList(msg["content"]["correctUserList"]);
@@ -142,33 +171,18 @@ export const Questioner: FC<Props> = (props) => {
     for (const [index, answerer] of answerers.entries()) {
       if (ans.user == answerer.user) idx = index;
     }
-    const array = answerers;
-    array[idx].isCorrect = flag ? 1 : 2;
-    setAnswerers([...array]);
+    setAnswerers((answerers) => {
+      answerers[idx].isJudged = true;
+      answerers[idx].isCorrect = flag ? 1 : 2
+      return [...answerers];
+    });
 
-    // 全員の解答の正誤判定が終わったら
-    if (answererNum == answerers.length) {
-      const correctUserList: string[] = [];
-      let correctCount = 0;
-      for (const answerer of answerers) {
-        if (answerer.isCorrect == 1) {
-          correctUserList.push(answerer.user);
-          correctCount++;
-        }
-      }
-      setAnswererNum(answererNum - correctCount);
-      var sendJsonCheck = {
-        command: "game_questioner_check",
-        content: { correctUserList },
-      };
-      socketRef.current?.send(JSON.stringify(sendJsonCheck));
-    }
+    if (flag) setCorrectUserList((CorrectUserList) => CorrectUserList.concat(ans.user));
   };
 
   const next_explanation = () => {
     var sendJsonNext = { command: "game_next_description" };
     socketRef.current?.send(JSON.stringify(sendJsonNext));
-    setAnswerers([]);
   };
 
   const question_done = () => {
@@ -184,44 +198,55 @@ export const Questioner: FC<Props> = (props) => {
   switch (status) {
 
     case QuestionerState.SubmittingQuestion:
+      if (props.isQuestioner) {
+        return (
+          <>
+            <StyledPage>
+              <StyledForm>
+                <p>質問：{topic}</p>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <div>
+                    <div>
+                      <StyledInput
+                        id="question"
+                        type="text"
+                        {...register("question", {
+                          required: "解答を入力してください",
+                          maxLength: {
+                            value: 30,
+                            message: "30文字以内で入力してください",
+                          },
+                          pattern: {
+                            value: /^[A-Za-z0-9ぁ-んーァ-ヶーｱ-ﾝﾞﾟ一-龠]+$/i,
+                            message: "入力の形式が不正です",
+                          },
+                        })}
+                      />
+                    </div>
+                    <StyledErrorMessage>
+                      <ErrorMessage
+                        errors={errors}
+                        name="question"
+                        render={({ message }) => <span>{message}</span>}
+                      />
+                    </StyledErrorMessage>
+                    <StyledButton type="submit">送信</StyledButton>
+                  </div>
+                </form>
+              </StyledForm>
+            </StyledPage>
+          </>
+        );
+      }
+
       return (
         <>
           <StyledPage>
-            <StyledForm>
-              <p>質問：{topic}</p>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <div>
-                  <div>
-                    <StyledInput
-                      id="question"
-                      type="text"
-                      {...register("question", {
-                        required: "解答を入力してください",
-                        maxLength: {
-                          value: 30,
-                          message: "30文字以内で入力してください",
-                        },
-                        pattern: {
-                          value: /^[A-Za-z0-9ぁ-んーァ-ヶーｱ-ﾝﾞﾟ一-龠]+$/i,
-                          message: "入力の形式が不正です",
-                        },
-                      })}
-                    />
-                  </div>
-                  <StyledErrorMessage>
-                    <ErrorMessage
-                      errors={errors}
-                      name="question"
-                      render={({ message }) => <span>{message}</span>}
-                    />
-                  </StyledErrorMessage>
-                  <StyledButton type="submit">送信</StyledButton>
-                </div>
-              </form>
-            </StyledForm>
+            <h3>待機中...</h3>
           </StyledPage>
         </>
       );
+
     
     case QuestionerState.JudgingAnswer:
       return (
@@ -243,27 +268,37 @@ export const Questioner: FC<Props> = (props) => {
                 {answerers.map((answerer, i) => (
                   <HStack key={i}>
                     <p>{answerer.user}:</p>
-                    {answerer.isCorrect != 0 ? (
+                    {props.isQuestioner ? (
+                      // 出題者
                       <>
-                        <StyledAnswer>
-                          {answerer.isCorrect == 1 ? "正解！" : "不正解..."}
-                        </StyledAnswer>
+                        {answerer.isCorrect != 0 ? (
+                          <>
+                            <StyledAnswer>
+                              {answerer.isCorrect == 1 ? "正解！" : "不正解..."}
+                            </StyledAnswer>
+                          </>
+                        ) : (
+                          <>
+                            <StyledAnswer>{answerer.answer}</StyledAnswer>
+                            <StyledQuizButton
+                              onClick={() => judge(true, answerer)}
+                              color="#98FB98"
+                            >
+                              o
+                            </StyledQuizButton>
+                            <StyledQuizButton
+                              onClick={() => judge(false, answerer)}
+                              color="#FA8072"
+                            >
+                              x
+                            </StyledQuizButton>
+                          </>
+                        )}
                       </>
                     ) : (
+                      // 正解した解答者
                       <>
                         <StyledAnswer>{answerer.answer}</StyledAnswer>
-                        <StyledQuizButton
-                          onClick={() => judge(true, answerer)}
-                          color="#98FB98"
-                        >
-                          o
-                        </StyledQuizButton>
-                        <StyledQuizButton
-                          onClick={() => judge(false, answerer)}
-                          color="#FA8072"
-                        >
-                          x
-                        </StyledQuizButton>
                       </>
                     )}
                   </HStack>
@@ -275,24 +310,35 @@ export const Questioner: FC<Props> = (props) => {
       );
   
     case QuestionerState.Result:
+      if (props.isQuestioner) {
+        return (
+          <>
+            <StyledPage>
+              <CorrectUserList correctUsers={correctUserList}></CorrectUserList>
+              <StyledHr />
+              <HStack>
+                { answererNum > 0 ? (
+                  <StyledButton onClick={next_explanation}>
+                    次の説明に移る
+                  </StyledButton>
+                ):(<></>) }
+                <StyledButton onClick={question_done}>
+                  この問題を終了する
+                </StyledButton>
+              </HStack>
+            </StyledPage>
+          </>
+        );
+      }
+
       return (
         <>
           <StyledPage>
             <CorrectUserList correctUsers={correctUserList}></CorrectUserList>
-            <StyledHr />
-            <HStack>
-              { answererNum > 0 ? (
-                <StyledButton onClick={next_explanation}>
-                  次の説明に移る
-                </StyledButton>
-              ):(<></>) }
-              <StyledButton onClick={question_done}>
-                この問題を終了する
-              </StyledButton>
-            </HStack>
           </StyledPage>
         </>
       );
+
 
     // chatGPT の回答待ち  
     case QuestionerState.Wait:

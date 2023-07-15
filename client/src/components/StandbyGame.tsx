@@ -3,7 +3,7 @@ import styled from "styled-components";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setJoinNum } from "../app/user/userSlice";
+import { setGameCount, setJoinNum } from "../app/user/userSlice";
 import { GameState } from "../views/Game";
 
 type Props = {
@@ -19,6 +19,7 @@ export const StandbyGame: FC<Props> = (props) => {
   const socketRef = props.socketRef;
   const [userNames, setUserNames] = useState<string[]>([]);
   const [userNum, setUserNum] = useState<number>(2);
+  // var userNum = 2;
   const navigate = useNavigate();
   var flag = 0;
   const [gameMode, setGameMode] = useState("normal");
@@ -54,6 +55,7 @@ export const StandbyGame: FC<Props> = (props) => {
               console.log(msg["content"]["user_name"]);
               setUserNames(msg["content"]["user_name"]);
               setUserNum(msg["content"]["user_name"].length);
+              //userNum =  msg["content"]["user_name"].length
               break;
             case "close_room":
               localStorage.removeItem("isOwner");
@@ -62,6 +64,7 @@ export const StandbyGame: FC<Props> = (props) => {
               navigate("/");
               break;
             case "role":
+              dispatch(setGameCount(0));
               dispatch(setJoinNum(userNum));
               if (msg["content"]["isQuestioner"])
                 props.setGameState(GameState.Questioner);
@@ -73,7 +76,7 @@ export const StandbyGame: FC<Props> = (props) => {
         };
       }
     }
-  }, []);
+  }, [userNum]);
 
   const startGame = function () {
     // ゲームを開始するとき
