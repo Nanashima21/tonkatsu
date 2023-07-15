@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setGameCount, setJoinNum } from "../app/user/userSlice";
 import { GameState } from "../views/Game";
-import { StyledButton, StyledHr, StyledPage, StyledUser, Checkbox, CheckboxLabel } from "../Styled";
+import { StyledButton, StyledHr, StyledPage, StyledUser, StyledCheckbox, StyledCheckboxLabel } from "../Styled";
 
 type Props = {
   socketRef: React.MutableRefObject<WebSocket | undefined>;
@@ -150,7 +150,7 @@ export const StandbyGame: FC<Props> = (props) => {
         <StyledPage>
           <h4>部屋 ID</h4>
           <h1>{roomid}</h1>
-          <Checkbox align="left">
+          <StyledCheckbox align="left">
             <div>
               <label>
                 <input
@@ -161,7 +161,7 @@ export const StandbyGame: FC<Props> = (props) => {
                     setGameMode("easy");
                   }}
                 />
-                <CheckboxLabel>Easy</CheckboxLabel>
+                <StyledCheckboxLabel>Easy</StyledCheckboxLabel>
               </label>
             </div>
             <div>
@@ -174,7 +174,7 @@ export const StandbyGame: FC<Props> = (props) => {
                     setGameMode("normal");
                   }}
                 />
-                <CheckboxLabel>Normal</CheckboxLabel>
+                <StyledCheckboxLabel>Normal</StyledCheckboxLabel>
               </label>
             </div>
             <div>
@@ -187,7 +187,7 @@ export const StandbyGame: FC<Props> = (props) => {
                     setGameMode("hard");
                   }}
                 />
-                <CheckboxLabel>Hard</CheckboxLabel>
+                <StyledCheckboxLabel>Hard</StyledCheckboxLabel>
               </label>
             </div>
             <div>
@@ -200,7 +200,7 @@ export const StandbyGame: FC<Props> = (props) => {
                     setGameMode("english");
                   }}
                 />
-                <CheckboxLabel>English</CheckboxLabel>
+                <StyledCheckboxLabel>English</StyledCheckboxLabel>
               </label>
             </div>
             <div>
@@ -213,10 +213,10 @@ export const StandbyGame: FC<Props> = (props) => {
                     setGameMode("chinese");
                   }}
                 />
-                <CheckboxLabel>Chinese</CheckboxLabel>
+                <StyledCheckboxLabel>Chinese</StyledCheckboxLabel>
               </label>
             </div>
-          </Checkbox>
+          </StyledCheckbox>
           <div>
             <StyledButton onClick={startGame}>ゲームを始める</StyledButton>
           </div>

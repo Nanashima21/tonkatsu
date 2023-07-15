@@ -1,11 +1,11 @@
 import styled from "styled-components";
 
-export const CheckboxLabel = styled.div`
+export const StyledCheckboxLabel = styled.div`
   margin-left: 10px;
   display: inline-block;
 `
 
-export const Checkbox = styled.div`
+export const StyledCheckbox = styled.div`
   padding: 5px 0 5px 140px;
 `
 
