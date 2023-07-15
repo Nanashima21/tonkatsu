@@ -9,6 +9,7 @@ import { GameState } from "../views/Game";
 type Props = {
   socketRef: React.MutableRefObject<WebSocket | undefined>;
   setGameState: (state: GameState) => void;
+  moveError: () => void;
 };
 
 export const StandbyGame: FC<Props> = (props) => {
@@ -70,6 +71,9 @@ export const StandbyGame: FC<Props> = (props) => {
                 props.setGameState(GameState.Questioner);
               else
                 props.setGameState(GameState.Answerer);
+              break;
+            case "game_disconnect":
+              props.moveError();
               break;
           }
           setStatus(2);

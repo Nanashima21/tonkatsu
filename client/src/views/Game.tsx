@@ -94,7 +94,7 @@ export const Game = function () {
     case GameState.Standby:
       return (
         <>
-          <StandbyGame socketRef={socketRef} setGameState={setGameState} />
+          <StandbyGame socketRef={socketRef} setGameState={setGameState} moveError={moveError} />
         </>
       );
     case GameState.Questioner:
