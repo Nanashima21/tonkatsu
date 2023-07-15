@@ -1,10 +1,10 @@
 import { FC, useState, useEffect } from "react";
-import styled from "styled-components";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setGameCount, setJoinNum } from "../app/user/userSlice";
 import { GameState } from "../views/Game";
+import { StyledButton, StyledHr, StyledPage, StyledUser, Checkbox, CheckboxLabel } from "../Styled";
 
 type Props = {
   socketRef: React.MutableRefObject<WebSocket | undefined>;
@@ -118,7 +118,7 @@ export const StandbyGame: FC<Props> = (props) => {
       <>
         <StyledPage>
           {" "}
-          <h3>部屋を検索中...</h3>
+          <h5>部屋を検索中...</h5>
         </StyledPage>
       </>
     );
@@ -129,7 +129,7 @@ export const StandbyGame: FC<Props> = (props) => {
     return (
       <>
         <StyledPage>
-          <h3>部屋が見つかりませんでした</h3>
+          <h5>部屋が見つかりませんでした</h5>
           <div>
             <StyledButton onClick={backHome}>戻る</StyledButton>
           </div>
@@ -148,73 +148,75 @@ export const StandbyGame: FC<Props> = (props) => {
     return (
       <>
         <StyledPage>
-          <h2>部屋 ID</h2>
+          <h4>部屋 ID</h4>
           <h1>{roomid}</h1>
-          <div>
-            <label>
-              <input
-                type="radio"
-                value="easy"
-                checked={gameMode === "easy"}
-                onChange={() => {
-                  setGameMode("easy");
-                }}
-              />
-              Easy
-            </label>
-          </div>
-          <div>
-            <label>
-              <input
-                type="radio"
-                value="normal"
-                checked={gameMode === "normal"}
-                onChange={() => {
-                  setGameMode("normal");
-                }}
-              />
-              Normal
-            </label>
-          </div>
-          <div>
-            <label>
-              <input
-                type="radio"
-                value="hard"
-                checked={gameMode === "hard"}
-                onChange={() => {
-                  setGameMode("hard");
-                }}
-              />
-              Hard
-            </label>
-          </div>
-          <div>
-            <label>
-              <input
-                type="radio"
-                value="english"
-                checked={gameMode === "english"}
-                onChange={() => {
-                  setGameMode("english");
-                }}
-              />
-              English
-            </label>
-          </div>
-          <div>
-            <label>
-              <input
-                type="radio"
-                value="chinese"
-                checked={gameMode === "chinese"}
-                onChange={() => {
-                  setGameMode("chinese");
-                }}
-              />
-              Chinese
-            </label>
-          </div>
+          <Checkbox align="left">
+            <div>
+              <label>
+                <input
+                  type="radio"
+                  value="easy"
+                  checked={gameMode === "easy"}
+                  onChange={() => {
+                    setGameMode("easy");
+                  }}
+                />
+                <CheckboxLabel>Easy</CheckboxLabel>
+              </label>
+            </div>
+            <div>
+              <label>
+                <input
+                  type="radio"
+                  value="normal"
+                  checked={gameMode === "normal"}
+                  onChange={() => {
+                    setGameMode("normal");
+                  }}
+                />
+                <CheckboxLabel>Normal</CheckboxLabel>
+              </label>
+            </div>
+            <div>
+              <label>
+                <input
+                  type="radio"
+                  value="hard"
+                  checked={gameMode === "hard"}
+                  onChange={() => {
+                    setGameMode("hard");
+                  }}
+                />
+                <CheckboxLabel>Hard</CheckboxLabel>
+              </label>
+            </div>
+            <div>
+              <label>
+                <input
+                  type="radio"
+                  value="english"
+                  checked={gameMode === "english"}
+                  onChange={() => {
+                    setGameMode("english");
+                  }}
+                />
+                <CheckboxLabel>English</CheckboxLabel>
+              </label>
+            </div>
+            <div>
+              <label>
+                <input
+                  type="radio"
+                  value="chinese"
+                  checked={gameMode === "chinese"}
+                  onChange={() => {
+                    setGameMode("chinese");
+                  }}
+                />
+                <CheckboxLabel>Chinese</CheckboxLabel>
+              </label>
+            </div>
+          </Checkbox>
           <div>
             <StyledButton onClick={startGame}>ゲームを始める</StyledButton>
           </div>
@@ -222,7 +224,7 @@ export const StandbyGame: FC<Props> = (props) => {
             <StyledButton onClick={cancelGame}>ゲームをキャンセル</StyledButton>
           </div>
           <StyledHr></StyledHr>
-          <h2>参加者</h2>
+          <p>参加者</p>
           <div>{userList}</div>
         </StyledPage>
       </>
@@ -233,7 +235,7 @@ export const StandbyGame: FC<Props> = (props) => {
   return (
     <>
       <StyledPage>
-        <h2>部屋 ID</h2>
+        <h4>部屋 ID</h4>
         <h1>{roomid}</h1>
         <div>
           <StyledButton onClick={startGame}>ゲームを始める</StyledButton>
@@ -242,45 +244,9 @@ export const StandbyGame: FC<Props> = (props) => {
           <StyledButton onClick={exitRoom}>部屋を抜ける</StyledButton>
         </div>
         <StyledHr></StyledHr>
-        <h2>参加者</h2>
+        <p>参加者</p>
         <div>{userList}</div>
       </StyledPage>
     </>
   );
 };
-
-const StyledHr = styled.hr`
-  border-color: #646cff;
-  margin-top: 40px;
-  width: 360px;
-`;
-
-const StyledUser = styled.h2`
-  padding: 0;
-  margin: 0;
-  font-weight: 500;
-`;
-const StyledPage = styled.div`
-  padding: 100px 0px;
-`;
-
-const StyledButton = styled.button`
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  margin: 1em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  width: 300px;
-  background-color: #f9f9f9;
-  cursor: pointer;
-  transition: border-color 0.25s;
-  &:hover {
-    border-color: #646cff;
-  }
-  &:focus,
-  &:focus-visible {
-    outline: 4px auto -webkit-focus-ring-color;
-  }
-`;
