@@ -13,6 +13,7 @@ type Props = {
   socketRef: React.MutableRefObject<WebSocket | undefined>;
   setGameState: (state: GameState) => void;
   moveResult: (json: ResultJson) => void;
+  moveError: () => void;
   isQuestioner: boolean
 };
 
@@ -36,8 +37,7 @@ const QuestionerState = {
   SubmittingQuestion: 0,
   JudgingAnswer: 1,
   Result: 2,
-  Wait: 3,
-  Error: 4
+  Wait: 3
 };
 
 type QuestionerState = (typeof QuestionerState)[keyof typeof QuestionerState];
@@ -110,7 +110,7 @@ export const Questioner: FC<Props> = (props) => {
       // ソケットエラー
       if (socketRef.current) {
         socketRef.current.onerror = function () {
-          setStatus(QuestionerState.Error);
+          props.moveError();
         };
       }
 
@@ -140,6 +140,9 @@ export const Questioner: FC<Props> = (props) => {
               break;
             case "game_show_result":
               props.moveResult(msg);
+              break;
+            case "game_disconnect":
+              props.moveError();
               break;
           }
         };
@@ -188,11 +191,6 @@ export const Questioner: FC<Props> = (props) => {
   const question_done = () => {
     var sendJson = { command: "game_questioner_done" };
     socketRef.current?.send(JSON.stringify(sendJson));
-  };
-
-  const backHome = function () {
-    props.setGameState(GameState.Init);
-    navigate("/");
   };
 
   switch (status) {
@@ -354,16 +352,8 @@ export const Questioner: FC<Props> = (props) => {
       break;
   }
 
-  // エラー
   return (
-    <>
-      <StyledPage>
-        <h3>接続に失敗しました</h3>
-        <div>
-          <StyledButton onClick={backHome}>戻る</StyledButton>
-        </div>
-      </StyledPage>
-    </>
+    <></>
   );
 };
 

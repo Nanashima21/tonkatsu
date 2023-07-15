@@ -5,6 +5,7 @@ import { Questioner } from "../components/Questioner";
 import { Result } from "../components/Result";
 import { AllResult } from "../components/AllResult";
 import { Answerer } from "../components/Answerer";
+import { GameWebSocketError } from "../components/GameWebSocketError";
 import { useSelector } from "react-redux";
 
 export const GameState = {
@@ -15,6 +16,7 @@ export const GameState = {
   Answerer: 4,
   Result: 5,
   AllResult: 6,
+  Error: 7,
 };
 
 export type GameState = (typeof GameState)[keyof typeof GameState];
@@ -83,6 +85,11 @@ export const Game = function () {
     setGameState(GameState.AllResult);
   }
 
+  const moveError = () => {
+    socketRef.current?.close();
+    setGameState(GameState.Error);
+  }
+
   switch (gameState) {
     case GameState.Standby:
       return (
@@ -93,25 +100,25 @@ export const Game = function () {
     case GameState.Questioner:
       return (
         <>
-          <Questioner socketRef={socketRef} setGameState={setGameState} moveResult={moveResult} isQuestioner={true} />
+          <Questioner socketRef={socketRef} setGameState={setGameState} moveResult={moveResult} isQuestioner={true} moveError={moveError} />
         </>
       );
     case GameState.AnsweredAnswerer:
       return (
         <>
-          <Questioner socketRef={socketRef} setGameState={setGameState} moveResult={moveResult} isQuestioner={false} />
+          <Questioner socketRef={socketRef} setGameState={setGameState} moveResult={moveResult} isQuestioner={false} moveError={moveError} />
         </>
       );
     case GameState.Answerer:
       return (
         <>
-          <Answerer socketRef={socketRef} setGameState={setGameState} moveResult={moveResult} />
+          <Answerer socketRef={socketRef} setGameState={setGameState} moveResult={moveResult} moveError={moveError} />
         </>
       );
     case GameState.Result:
       return (
         <>
-          <Result socketRef={socketRef} setGameState={setGameState} result={result} moveAllResult={moveAllResult}/>
+          <Result socketRef={socketRef} setGameState={setGameState} result={result} moveAllResult={moveAllResult} moveError={moveError} />
         </>
       );
     case GameState.AllResult:
@@ -121,6 +128,11 @@ export const Game = function () {
         </>
       );
     default:
+      return (
+        <>
+          <GameWebSocketError />
+        </>
+      );
       break;
   }
 

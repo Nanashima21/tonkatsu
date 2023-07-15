@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Box, HStack, VStack } from "@chakra-ui/react";
 import { GameState, ResultJson, AllResultJson } from "../views/Game";
 import { setGameCount } from "../app/user/userSlice";
@@ -11,6 +10,7 @@ type Props = {
   setGameState: (state: GameState) => void;
   result: ResultJson;
   moveAllResult: (json: AllResultJson) => void;
+  moveError: () => void;
 };
 
 type Userscore = {
@@ -25,7 +25,6 @@ type Topic = {
 };
 
 export const Result: FC<Props> = (props) => {
-  const navigate = useNavigate();
   const socketRef = props.socketRef;
   var flag = 0;
   const joinNum = useSelector((state: any) => state.user.joinNum);
@@ -39,12 +38,6 @@ export const Result: FC<Props> = (props) => {
   });
   const [gameResults, setGameResults] = useState<Userscore[]>([]);
 
-  // status:
-  // 0: WebSocket 接続前
-  // 1: WebSocket 接続失敗
-  // 2: WebSocket 接続成功
-  const [status, setStatus] = useState(0);
-
   // WebSocket
   useEffect(() => {
     if (flag == 0) {
@@ -56,7 +49,7 @@ export const Result: FC<Props> = (props) => {
       // ソケットエラー
       if (socketRef.current) {
         socketRef.current.onerror = function () {
-          setStatus(1);
+          props.moveError();
         };
       }
 
@@ -76,9 +69,11 @@ export const Result: FC<Props> = (props) => {
                 props.setGameState(GameState.Questioner);
               else props.setGameState(GameState.Answerer);
               break;
+            case "game_disconnect":
+              props.moveError();
+              break;
           }
         };
-        setStatus(2);
       }
 
       const objTopic: Topic = {
@@ -120,36 +115,6 @@ export const Result: FC<Props> = (props) => {
     var sendJson = { command: "game_finish_game" };
     socketRef.current?.send(JSON.stringify(sendJson));
   };
-
-  const backHome = function () {
-    props.setGameState(GameState.Init);
-    navigate("/");
-  };
-
-  // 接続中
-  if (status == 0) {
-    return (
-      <>
-        <StyledPage>
-          <h3>接続中...</h3>
-        </StyledPage>
-      </>
-    );
-  }
-
-  // 接続失敗
-  if (status == 1) {
-    return (
-      <>
-        <StyledPage>
-          <h3>接続に失敗しました</h3>
-          <div>
-            <StyledButton onClick={backHome}>戻る</StyledButton>
-          </div>
-        </StyledPage>
-      </>
-    );
-  }
 
   return (
     <>

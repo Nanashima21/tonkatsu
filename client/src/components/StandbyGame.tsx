@@ -104,6 +104,7 @@ export const StandbyGame: FC<Props> = (props) => {
   };
 
   const backHome = function () {
+    socketRef.current?.close();
     navigate("/");
   };
 
