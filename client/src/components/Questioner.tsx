@@ -54,10 +54,15 @@ export const Questioner: FC<Props> = (props) => {
 
   const topics: string[] = [
     "好きな食べ物は？",
-    "好きな本は？",
+    // "好きな本は？",
     "好きな動物は？",
     "好きなアーティストは？",
     "好きなポケモンは？",
+    "行ってみたい国は？",
+    "旅行したい都道府県は？",
+    "好きな飲み物は？",
+    "好きなスポーツは？",
+    "嫌いな食べ物は？",
   ];
 
   const rand = (): number => {
@@ -258,9 +263,11 @@ export const Questioner: FC<Props> = (props) => {
                 <p>送信したお題：{question}</p>
                 <p>
                   {explanations.map((explanation, i) => (
+                    <div align="left">
                     <p key={i}>
-                      {explanation.index}番目の説明 : {explanation.description}
+                      {explanation.description}
                     </p>
+                    </div>
                   ))}
                 </p>
               </VStack>
