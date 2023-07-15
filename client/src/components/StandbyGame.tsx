@@ -3,7 +3,7 @@ import styled from "styled-components";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setJoinNum } from "../app/user/userSlice";
+import { setGameCount, setJoinNum } from "../app/user/userSlice";
 import { GameState } from "../views/Game";
 
 type Props = {
@@ -64,6 +64,7 @@ export const StandbyGame: FC<Props> = (props) => {
               navigate("/");
               break;
             case "role":
+              dispatch(setGameCount(0));
               dispatch(setJoinNum(userNum));
               if (msg["content"]["isQuestioner"])
                 props.setGameState(GameState.Questioner);

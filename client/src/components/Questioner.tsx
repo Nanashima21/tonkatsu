@@ -122,6 +122,7 @@ export const Questioner: FC<Props> = (props) => {
           switch (msg["command"]) {
             case "game_description":
               setAnswerers(() => []);
+              setCorrectUserList(() => []);
               setExplanations((explanations) => explanations.concat(msg["content"]));
               setStatus(QuestionerState.JudgingAnswer);
               break;
@@ -177,16 +178,6 @@ export const Questioner: FC<Props> = (props) => {
     });
 
     if (flag) setCorrectUserList((CorrectUserList) => CorrectUserList.concat(ans.user));
-
-    // // 全員の解答の正誤判定が終わったら
-    // if (judgedCnt == answerers.length) {
-    //   console.log(answererNum, judgedCnt)
-    //   var sendJsonCheck = {
-    //     command: "game_questioner_check",
-    //     content: { correctUserList },
-    //   };
-    //   socketRef.current?.send(JSON.stringify(sendJsonCheck));
-    // }
   };
 
   const next_explanation = () => {
