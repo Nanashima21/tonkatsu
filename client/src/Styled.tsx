@@ -24,6 +24,7 @@ export const StyledUser = styled.h5`
 
 export const StyledPage = styled.div`
   padding: 100px 0px;
+  min-width: 400px;
 `;
 
 export const StyledButton = styled.button`
