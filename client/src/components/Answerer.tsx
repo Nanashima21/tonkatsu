@@ -105,6 +105,9 @@ export const Answerer: FC<Props> = (props) => {
               props.setExplanations([]);
               props.moveResult(msg);
               break;
+            case "game_disconnect":
+              props.moveError();
+              break;
           }
         };
       }
