@@ -1,6 +1,6 @@
 import { FC } from "react";
-import styled from "styled-components";
 import Typical from "react-typical";
+import { StyledUser } from "../Styled";
 
 export type Explanation = {
   description: string;
@@ -44,9 +44,3 @@ export const CorrectUserList: FC<CorrectUserProps> = (props) => {
     </>
   )
 };
-
-const StyledUser = styled.h2`
-  padding: 0;
-  margin: 0;
-  font-weight: 500;
-`;
