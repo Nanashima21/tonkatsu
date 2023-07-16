@@ -47,26 +47,29 @@ export type AllResultJson = {
 };
 
 export const Game = function () {
-  const topics: string[] = [
-    "好きな食べ物は？",
-    // "好きな本は？",
-    "好きな動物は？",
-    "好きなアーティストは？",
-    "好きなポケモンは？",
-    "行ってみたい国は？",
-    "旅行したい都道府県は？",
-    "好きな飲み物は？",
-    "好きなスポーツは？",
-    "嫌いな食べ物は？",
-  ];
-
-  const rand = (): number => {
-    return Math.floor(Math.random() * topics.length);
-  };
-
   const roomid = useSelector((state: any) => state.user.roomId);
 
-  const [topic, setTopic] = useState(topics[rand()]);
+  const resetTopic = () => {
+    const topics: string[] = [
+      "好きな食べ物は？",
+      "好きな動物は？",
+      "好きなアーティストは？",
+      "行ってみたい国は？",
+      "旅行したい都道府県は？",
+      "好きな飲み物は？",
+      "好きなスポーツは？",
+      "趣味は？",
+      "特技は？",
+      "嫌いな食べ物は？",
+    ];
+    const rand = (): number => {
+      return Math.floor(Math.random() * topics.length);
+    };
+    return topics[rand()];
+  }
+
+  const [topic, setTopic] = useState(resetTopic());
+
   const [question, setQuestion] = useState("");
   const [explanations, setExplanations] = useState<Explanation[]>([]);
 
@@ -148,13 +151,13 @@ export const Game = function () {
     case GameState.ResultQuestioner:
       return (
         <>
-          <Result socketRef={socketRef} setGameState={setGameState} result={result} moveAllResult={moveAllResult} isQuestioner={true} moveError={moveError} />
+          <Result socketRef={socketRef} setGameState={setGameState} result={result} setTopic={setTopic} resetTopic={resetTopic} moveAllResult={moveAllResult} isQuestioner={true} moveError={moveError} />
         </>
       );
     case GameState.ResultAnswerer:
       return (
         <>
-          <Result socketRef={socketRef} setGameState={setGameState} result={result} moveAllResult={moveAllResult} isQuestioner={false} moveError={moveError} />
+          <Result socketRef={socketRef} setGameState={setGameState} result={result} setTopic={setTopic} resetTopic={resetTopic} moveAllResult={moveAllResult} isQuestioner={false} moveError={moveError} />
         </>
       );
     case GameState.AllResult:
