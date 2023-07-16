@@ -90,19 +90,10 @@ export const StyledAnswer = styled.div`
   width: 60%;
   display: inline-block;
   position: relative; 
-  margin: 5px 0 0 30px;
+  margin: 5px 0 0 16px;
   padding: 17px 13px;
-  border-radius: 12px;
-  background: #d7ebfe;
-  &:after {
-    content: "";
-    display: inline-block;
-    position: absolute;
-    top: 18px; 
-    left: -24px;
-    border: 12px solid transparent;
-    border-right: 12px solid #d7ebfe;
-  }
+  border-radius: 100px;
+  background: #eeeeee;
   &:p {
   margin: 0;
   padding: 0;
@@ -112,3 +103,24 @@ export const StyledMessage = styled.p`
   margin: 15px 0 0;
   color: #b3b3b3;
 `;
+
+export const StyledUserList = styled.div`
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  padding-top: 15px;
+  margin: 0 0 60px;
+`
+
+export const StyledUserListElem = styled.div`
+  flex: 1 1 50%;
+  width: 40%;
+  border-bottom: solid 3px #e0e0e0;
+  margin: 0 auto;
+  padding-top: 15px;
+`
+
+export const StyledLogo = styled.img`
+  margin: 0 auto 20px;
+  width: 300px;
+`

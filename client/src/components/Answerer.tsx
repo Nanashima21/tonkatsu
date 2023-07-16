@@ -6,6 +6,7 @@ import { GameState, ResultJson } from "../views/Game";
 import { Explanation, DescriptionList, CorrectUserList } from "./GameComponents";
 import { useCookies } from "react-cookie";
 import { StyledButton, StyledPage, StyledForm, StyledErrorMessage, StyledInput, StyledHr } from "../Styled";
+import "./../index.css";
 
 const AnswerState = {
   WaitQuestionerAnswer: 0,
@@ -134,7 +135,7 @@ export const Answerer: FC<Props> = (props) => {
     return (
       <>
         <StyledPage>
-          <h3>待機中...</h3>
+          <h5>待機中...</h5>
         </StyledPage>
       </>
     );
@@ -144,11 +145,12 @@ export const Answerer: FC<Props> = (props) => {
     return (
       <>
         <StyledPage>
-          <DescriptionList explanations={props.explanations}></DescriptionList>
           <StyledForm>
+            <DescriptionList explanations={props.explanations} isQuestioner={false}></DescriptionList>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div>
+              <div style={{marginTop: 40}}>
                 <div>
+                  <h4>よく考えてね。</h4>
                   <StyledInput
                     id="answer"
                     type="text"
@@ -184,9 +186,12 @@ export const Answerer: FC<Props> = (props) => {
     return (
       <>
         <StyledPage>
-          <DescriptionList explanations={props.explanations}></DescriptionList>
-          <p>あなたの解答</p>
-          <h2>{answer}</h2>
+          <StyledForm>
+            <DescriptionList explanations={props.explanations} isQuestioner={false}></DescriptionList>
+            <StyledHr style={{marginTop: 50, marginBottom: 20}}></StyledHr>
+            <h5>あなたの解答</h5>
+            <h4>{answer}</h4>
+          </StyledForm>
         </StyledPage>
       </>
     );
@@ -195,7 +200,7 @@ export const Answerer: FC<Props> = (props) => {
     return (
       <>
         <StyledPage>
-          <p>あなたは...</p>
+          <h5>あなたは...</h5>
           <div>
           {isCorrect ? <h2 className="big_raibow">正解</h2>: <h2 className="sad_black">不正解</h2>}
           </div>

@@ -1,6 +1,6 @@
 import { FC } from "react";
 import Typical from "react-typical";
-import { StyledUser } from "../Styled";
+import { StyledUser, StyledUserList, StyledUserListElem } from "../Styled";
 
 export type Explanation = {
   description: string;
@@ -9,6 +9,7 @@ export type Explanation = {
 
 type DescriptionProps = {
   explanations: Explanation[]
+  isQuestioner: boolean
 };
 
 type CorrectUserProps = {
@@ -20,30 +21,34 @@ export const DescriptionList: FC<DescriptionProps> = (props) => {
   for (const [idx, content] of props.explanations.entries()) {
     const steps = [content.description, 10];
     
-    if (idx == props.explanations.length - 1) {
-      descriptionList.push(<StyledUser key={content.index}><Typical steps={steps} loop={Infinity} wrapper="span" /></StyledUser>);
+    if (idx == props.explanations.length - 1 && !props.isQuestioner) {
+      descriptionList.push(<li key={content.index}><h5><Typical steps={steps} loop={Infinity} wrapper="span" /></h5></li>);
     } else {
-      descriptionList.push(<StyledUser key={content.index}>{content.description}</StyledUser>);
+      descriptionList.push(<li><h5 key={content.index}>{content.description}</h5></li>);
     }
   }
 
   return (
     <>
-      <div align="left">{descriptionList}</div>
+      <div align="left"><ul>{descriptionList}</ul></div>
     </>
   )
 };
 
 export const CorrectUserList: FC<CorrectUserProps> = (props) => {
   const correctUserList = [];
+  if (props.correctUsers.length == 0) {
+    correctUserList.push(<h4>いませんでした...</h4>)
+  }
+
   for (const [index, correctUser] of props.correctUsers.entries()) {
-    correctUserList.push(<StyledUser key={index}>{correctUser}</StyledUser>);
+    correctUserList.push(<StyledUserListElem><StyledUser key={index}>{correctUser}</StyledUser></StyledUserListElem>);
   }
 
   return (
     <>
-      <h2>正解者</h2>
-      <div>{correctUserList}</div>
+      <h5>正解者</h5>
+      <StyledUserList>{correctUserList}</StyledUserList>
     </>
   )
 };
