@@ -9,6 +9,7 @@ type Props = {
   socketRef: React.MutableRefObject<WebSocket | undefined>;
   setGameState: (state: GameState) => void;
   result: ResultJson;
+  isQuestioner: boolean;
   moveAllResult: (json: AllResultJson) => void;
   moveError: () => void;
 };
@@ -75,7 +76,7 @@ export const Result: FC<Props> = (props) => {
           }
         };
       }
-
+      
       const objTopic: Topic = {
         questioner: props.result["content"]["questioner"],
         question: props.result["content"]["question"],
@@ -83,7 +84,7 @@ export const Result: FC<Props> = (props) => {
       setTopic(objTopic);
       setGameResults(rank_array(props.result["content"]["result"]));
     }
-  }, []);
+  }, [props.result]);
 
   const rank_array = (array: Userscore[]) => {
     const rankedArray: Userscore[] = [];
@@ -93,6 +94,7 @@ export const Result: FC<Props> = (props) => {
     var curscore = -1;
     var curindex = 0;
     for (const user of sortedArray) {
+      if (user.userName == props.result["content"]["questioner"]) continue;
       if (curscore != user.score) {
         curscore = user.score;
         curindex += 1;
@@ -103,7 +105,7 @@ export const Result: FC<Props> = (props) => {
       };
       rankedArray.push(rankedUser);
     }
-    return rankedArray;
+    return [...rankedArray];
   };
 
   const next_question = () => {
@@ -139,7 +141,7 @@ export const Result: FC<Props> = (props) => {
           {isLast ? (
             <StyledButton onClick={finish_game}>最終結果を見る</StyledButton>
           ) : (
-            <StyledButton onClick={next_question}>次の問題に移る</StyledButton>
+            <>{props.isQuestioner ? (<StyledButton onClick={next_question}>次の問題に移る</StyledButton>) : (<></>)}</>
           )}
         </StyledScreen>
       </StyledPage>
