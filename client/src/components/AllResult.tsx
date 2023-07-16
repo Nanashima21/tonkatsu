@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, HStack, VStack } from "@chakra-ui/react";
 import { GameState, AllResultJson } from "../views/Game";
 import { StyledButton, StyledPage, StyledScreen, StyledHr } from "../Styled";
+import App from "../App";
 
 type Props = {
   setGameState: (state: GameState) => void;
@@ -49,8 +50,27 @@ export const AllResult: FC<Props> = (props) => {
     navigate("/");
   };
 
+  const Appeal = (
+    <style>
+      {`
+        @keyframes appeal {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}
+    </style>
+  );
+
+  const styles = ({
+    appeal: {
+      animation: "appeal infinite 20s linear;",
+    },
+  });
+  
+
   return (
     <>
+      
       <StyledPage>
         <StyledScreen>
           <VStack>
@@ -58,11 +78,28 @@ export const AllResult: FC<Props> = (props) => {
           </VStack>
           <VStack alignItems="left" py="20px" px="150px" spacing="20px">
             {gameResults.map((gameResult, i) => (
-              <HStack key={i}>
+              
+              <div style={styles.appeal}>
+                {Appeal}
+
+              <HStack key={i} className={"ranking-"+i}>
+              <style>
+        {`@keyframes toLeft {
+          0% {
+            transform: translateX(100%);
+          }
+          100% {
+            transform: translateX(-100%);
+          }
+        }`}
+      </style>
                 <Box width="50px">{gameResult.rank}位</Box>
-                <Box width="200px">{gameResult.userName}</Box>
+                <Box width="200px" style={{
+                  animation: `toLeft 1s infinite`
+                }}>{gameResult.userName}</Box>
                 <Box width="50px">{gameResult.score}pt</Box>
               </HStack>
+              </div>
             ))}
           </VStack>
           <StyledHr />
