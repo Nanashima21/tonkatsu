@@ -90,19 +90,10 @@ export const StyledAnswer = styled.div`
   width: 60%;
   display: inline-block;
   position: relative; 
-  margin: 5px 0 0 30px;
+  margin: 5px 0 0 16px;
   padding: 17px 13px;
-  border-radius: 12px;
-  background: #d7ebfe;
-  &:after {
-    content: "";
-    display: inline-block;
-    position: absolute;
-    top: 18px; 
-    left: -24px;
-    border: 12px solid transparent;
-    border-right: 12px solid #d7ebfe;
-  }
+  border-radius: 100px;
+  background: #eeeeee;
   &:p {
   margin: 0;
   padding: 0;

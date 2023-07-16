@@ -195,7 +195,7 @@ export const Questioner: FC<Props> = (props) => {
           <>
             <StyledPage>
               <StyledForm>
-                <p>質問：{props.topic}</p>
+                <h5>質問：{props.topic}</h5>
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <div>
                     <div>
@@ -246,45 +246,40 @@ export const Questioner: FC<Props> = (props) => {
           <StyledPage>
             <StyledScreen>
               <VStack>
-                <p>質問：{props.topic}</p>
-                <p>{props.isQuestioner ? "送信したお題" : "お題"} : {props.question}</p>
-                <p>
-                  {props.explanations.map((explanation, i) => (
-                    <div align="left">
-                    <p key={i}>
-                      {explanation.description}
-                    </p>
-                    </div>
-                  ))}
-                </p>
+                <h5>質問：{props.topic}</h5>
+                <h5 style={{marginBottom: 20}}>{props.isQuestioner ? "送信したお題" : "お題"} : {props.question}</h5>
+                <DescriptionList explanations={props.explanations} isQuestioner={true}></DescriptionList>
               </VStack>
-              <VStack alignItems="left" p="20px" spacing="20px">
+              <VStack alignItems="left" p="20px" spacing="30px">
                 {answerers.map((answerer, i) => (
                   <HStack key={i}>
-                    <p>{answerer.user}:</p>
+                    <VStack spacing={0}>
+                      <img src="/src/assets/icon-user.png" width="40" style={{paddingTop: 12}}></img>
+                      <p>{answerer.user}</p>
+                    </VStack>
                     {props.isQuestioner ? (
                       // 出題者
                       <>
                         {answerer.isCorrect != 0 ? (
                           <>
                             <StyledAnswer>
-                              {answerer.isCorrect == 1 ? "正解！" : "不正解..."}
+                              <h5>{answerer.isCorrect == 1 ? "正解！" : "不正解..."}</h5>
                             </StyledAnswer>
                           </>
                         ) : (
                           <>
-                            <StyledAnswer>{answerer.answer}</StyledAnswer>
+                            <StyledAnswer style={{ marginRight: 20 }}><h5>{answerer.answer}</h5></StyledAnswer>
                             <StyledQuizButton
                               onClick={() => judge(true, answerer)}
-                              color="#98FB98"
+                              style={{ marginRight: 5, marginTop: 15 }}
                             >
-                              o
+                              <img src="/src/assets/icon-maru.png"></img>
                             </StyledQuizButton>
                             <StyledQuizButton
                               onClick={() => judge(false, answerer)}
-                              color="#FA8072"
+                              style={{ marginTop: 15 }}
                             >
-                              x
+                              <img src="/src/assets/icon-batsu.png"></img>
                             </StyledQuizButton>
                           </>
                         )}
@@ -292,7 +287,7 @@ export const Questioner: FC<Props> = (props) => {
                     ) : (
                       // 正解した解答者
                       <>
-                        <StyledAnswer>{answerer.answer}</StyledAnswer>
+                        <StyledAnswer><h5>{answerer.answer}</h5></StyledAnswer>
                       </>
                     )}
                   </HStack>
