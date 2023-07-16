@@ -4,6 +4,7 @@ import { Box, HStack, VStack } from "@chakra-ui/react";
 import { GameState, AllResultJson } from "../views/Game";
 import { StyledButton, StyledPage, StyledScreen, StyledHr } from "../Styled";
 import App from "../App";
+import snareRoll from "../assets/snare_roll.mp3"
 
 type Props = {
   setGameState: (state: GameState) => void;
@@ -19,6 +20,7 @@ type Userscore = {
 export const AllResult: FC<Props> = (props) => {
   const navigate = useNavigate();
   const [gameResults, setGameResults] = useState<Userscore[]>([]);
+  const audio = new Audio(snareRoll);
 
   const rank_array = (array: Userscore[]) => {
     const rankedArray: Userscore[] = [];
@@ -44,6 +46,10 @@ export const AllResult: FC<Props> = (props) => {
   useEffect(() => {
     setGameResults(rank_array(props.result["content"]["result"]));
   }, []);
+
+  useEffect(() => {
+    audio.play()
+  }, [])
 
   const backHome = function () {
     props.setGameState(GameState.Init);
