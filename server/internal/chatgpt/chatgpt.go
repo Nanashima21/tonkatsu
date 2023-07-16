@@ -135,6 +135,9 @@ func SplitMessage(message string) []string {
 	var refined_slice []string
 	for _, v := range message_slice {
 		if v != "" {
+
+			rep := regexp.MustCompile(`^[123456789].`)
+			v = rep.ReplaceAllString(v, "")
 			refined_slice = append(refined_slice, v)
 		}
 	}
