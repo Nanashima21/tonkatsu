@@ -5,7 +5,7 @@ import { useCookies } from "react-cookie";
 import { ErrorMessage } from "@hookform/error-message";
 import { useDispatch } from "react-redux";
 import { becomeOwner, createRoom } from "../app/user/userSlice";
-import { StyledButton, StyledPage, StyledForm, StyledErrorMessage, StyledInput, StyledHr } from "../Styled";
+import { StyledButton, StyledPage, StyledForm, StyledErrorMessage, StyledInput, StyledHr, StyledLogo } from "../Styled";
 
 type RoomId = {
   id: string;
@@ -79,8 +79,9 @@ export const LoginedHome = () => {
   return (
     <>
       <StyledPage>
-        <h5>userID : {cookies.userID}</h5>
         <StyledForm>
+          <StyledLogo style={{width: 300}} src="/src/assets/logo.png"></StyledLogo>
+          <h5>userID : {cookies.userID}</h5>
           <form onSubmit={handleSubmit(joinButton)}>
             <div>
               <StyledInput

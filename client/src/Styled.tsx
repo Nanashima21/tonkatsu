@@ -111,3 +111,8 @@ export const StyledMessage = styled.p`
   margin: 15px 0 0;
   color: #b3b3b3;
 `;
+
+export const StyledLogo = styled.img`
+  margin: 0 auto 20px;
+  width: 300px;
+`
