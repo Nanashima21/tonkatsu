@@ -9,6 +9,8 @@ type Props = {
   socketRef: React.MutableRefObject<WebSocket | undefined>;
   setGameState: (state: GameState) => void;
   result: ResultJson;
+  setTopic: (state: string) => void;
+  resetTopic: () => string;
   isQuestioner: boolean;
   moveAllResult: (json: AllResultJson) => void;
   moveError: () => void;
@@ -66,8 +68,10 @@ export const Result: FC<Props> = (props) => {
               break;
             case "role":
               dispatch(setGameCount(gameCount + 1));
-              if (msg["content"]["isQuestioner"])
+              if (msg["content"]["isQuestioner"]) {
                 props.setGameState(GameState.Questioner);
+                props.setTopic(props.resetTopic());
+              }
               else props.setGameState(GameState.Answerer);
               break;
             case "game_disconnect":
