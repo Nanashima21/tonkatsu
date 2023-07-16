@@ -54,7 +54,7 @@ type SendCorrectUsers struct {
 
 type SendResults struct {
 	Result     []SendResult `json:"result"`
-	Question   string       `json:"answer"`
+	Question   string       `json:"question"`
 	Questioner string       `json:"questioner"`
 }
 
