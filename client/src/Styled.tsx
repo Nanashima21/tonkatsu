@@ -13,7 +13,7 @@ export const StyledHr = styled.hr`
   border-color: #646cff;
   margin-top: 30px;
   margin-bottom: 10px;
-  width: 360px;
+  width: 100%;
 `;
 
 export const StyledUser = styled.h5`
