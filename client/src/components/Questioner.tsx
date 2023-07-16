@@ -334,7 +334,7 @@ export const Questioner: FC<Props> = (props) => {
       return (
         <>
           <StyledPage>
-            <h3>待機中...</h3>
+            <h5>待機中...</h5>
           </StyledPage>
         </>
       );
