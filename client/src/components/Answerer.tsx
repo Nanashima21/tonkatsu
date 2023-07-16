@@ -20,7 +20,7 @@ type AnswerState = (typeof AnswerState)[keyof typeof AnswerState];
 type Props = {
   socketRef: React.MutableRefObject<WebSocket | undefined>;
   setGameState: (state: GameState) => void;
-  moveResult: (json: ResultJson) => void;
+  moveResult: (json: ResultJson, flag: boolean) => void;
   moveError: () => void;
   explanations: Explanation[];
   setExplanations: (state: Explanation[]) => void;
@@ -103,7 +103,7 @@ export const Answerer: FC<Props> = (props) => {
               break;
             case "game_show_result":
               props.setExplanations([]);
-              props.moveResult(msg);
+              props.moveResult(msg, false);
               break;
           }
         };
@@ -211,7 +211,7 @@ export const Answerer: FC<Props> = (props) => {
       <StyledPage>
         <h3>接続に失敗しました</h3>
         <div>
-          <StyledButton onClick={backHome}>戻る</StyledButton>
+          <StyledButton>戻る</StyledButton>
         </div>
       </StyledPage>
     </>
