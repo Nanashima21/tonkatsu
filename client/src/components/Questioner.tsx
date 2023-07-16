@@ -16,7 +16,13 @@ type Props = {
   setGameState: (state: GameState) => void;
   moveResult: (json: ResultJson) => void;
   moveError: () => void;
-  isQuestioner: boolean
+  isQuestioner: boolean;
+  explanations: Explanation[];
+  setExplanations: (state: Explanation[]) => void;
+  topic: string,
+  setTopic: (state: string) => void;
+  question: string,
+  setQuestion: (state: string) => void;
 };
 
 type Topic = {
@@ -54,24 +60,6 @@ export const Questioner: FC<Props> = (props) => {
     mode: "onChange",
   });
 
-  const topics: string[] = [
-    "好きな食べ物は？",
-    // "好きな本は？",
-    "好きな動物は？",
-    "好きなアーティストは？",
-    "好きなポケモンは？",
-    "行ってみたい国は？",
-    "旅行したい都道府県は？",
-    "好きな飲み物は？",
-    "好きなスポーツは？",
-    "嫌いな食べ物は？",
-  ];
-
-  const rand = (): number => {
-    return Math.floor(Math.random() * topics.length);
-  };
-
-  const navigate = useNavigate();
   const socketRef = props.socketRef;
   var flag = 0;
 
@@ -79,9 +67,6 @@ export const Questioner: FC<Props> = (props) => {
   const allAnswererNum = joinNum - 1;
   const [answererNum, setAnswererNum] = useState<number>(allAnswererNum);
 
-  const [topic, setTopic] = useState(topics[rand()]);
-  const [question, setQuestion] = useState("");
-  const [explanations, setExplanations] = useState<Explanation[]>([]);
   const [answerers, setAnswerers] = useState<Answerer[]>(() => []);
   const [correctUserList, setCorrectUserList] = useState<string[]>([]);
 
@@ -130,22 +115,29 @@ export const Questioner: FC<Props> = (props) => {
             case "game_description":
               setAnswerers(() => []);
               setCorrectUserList(() => []);
-              setExplanations((explanations) => explanations.concat(msg["content"]));
+              props.setTopic(msg["content"]["topic"]);
+              props.setQuestion(msg["content"]["question"]);
+              const explanationArgs: Explanation = {
+                description: msg["content"]["description"],
+                index: msg["content"]["index"],
+              }
+              props.setExplanations(props.explanations.concat(explanationArgs));
               setStatus(QuestionerState.JudgingAnswer);
               break;
             case "game_questioner_recieve":
-              const args: Answerer = {
+              const answererArgs: Answerer = {
                 ...msg["content"],
                 isCorrect: 0,
                 isJudged: false,
               };
-              setAnswerers((answerers) => answerers.concat(args));
+              setAnswerers((answerers) => answerers.concat(answererArgs));
               break;
             case "game_answerer_checked":
               setCorrectUserList(msg["content"]["correctUserList"]);
               setStatus(QuestionerState.Result);
               break;
             case "game_show_result":
+              props.setExplanations([]);
               props.moveResult(msg);
               break;
             case "game_disconnect":
@@ -155,19 +147,14 @@ export const Questioner: FC<Props> = (props) => {
         };
       }
     }
-  }, []);
-
-  // 質問をランダムで返す
-  useEffect(() => {
-    setTopic(topics[rand()]);
-  }, []);
+  }, [props.explanations]);
 
   const onSubmit: SubmitHandler<Topic> = (data) => {
-    setQuestion(data.question);
+    props.setQuestion(data.question);
     var sendJson = {
       command: "game_questioner_question",
       content: {
-        topic: data.topic,
+        topic: props.topic,
         question: data.question,
       },
     };
@@ -208,7 +195,7 @@ export const Questioner: FC<Props> = (props) => {
           <>
             <StyledPage>
               <StyledForm>
-                <p>質問：{topic}</p>
+                <p>質問：{props.topic}</p>
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <div>
                     <div>
@@ -259,10 +246,10 @@ export const Questioner: FC<Props> = (props) => {
           <StyledPage>
             <StyledScreen>
               <VStack>
-                <p>質問：{topic}</p>
-                <p>送信したお題：{question}</p>
+                <p>質問：{props.topic}</p>
+                <p>{props.isQuestioner ? "送信したお題" : "お題"} : {props.question}</p>
                 <p>
-                  {explanations.map((explanation, i) => (
+                  {props.explanations.map((explanation, i) => (
                     <div align="left">
                     <p key={i}>
                       {explanation.description}
@@ -324,7 +311,7 @@ export const Questioner: FC<Props> = (props) => {
               <CorrectUserList correctUsers={correctUserList}></CorrectUserList>
               <StyledHr />
               <HStack>
-                { answererNum > 0 ? (
+                { props.explanations.length < 5 && answererNum > 0 ? (
                   <StyledButton onClick={next_explanation}>
                     次の説明に移る
                   </StyledButton>

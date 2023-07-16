@@ -21,6 +21,13 @@ type Props = {
   socketRef: React.MutableRefObject<WebSocket | undefined>;
   setGameState: (state: GameState) => void;
   moveResult: (json: ResultJson) => void;
+  moveError: () => void;
+  explanations: Explanation[];
+  setExplanations: (state: Explanation[]) => void;
+  topic: string,
+  setTopic: (state: string) => void;
+  question: string,
+  setQuestion: (state: string) => void;
 };
 
 type Topic = {
@@ -51,7 +58,6 @@ export const Answerer: FC<Props> = (props) => {
   const socketRef = props.socketRef;
   var flag = 0;
   const [status, setStatus] = useState<AnswerState>(AnswerState.WaitQuestionerAnswer);
-  const [explanations, setExplanations] = useState<Explanation[]>([]);
   const [answer, setAnswer] = useState("");
   const [userid, setUserid, removeUserid] = useCookies(["userID"]);
   const [correctUserList, setCorrectUserList] = useState<string[]>([]);
@@ -74,11 +80,17 @@ export const Answerer: FC<Props> = (props) => {
           var msg = JSON.parse(event.data);
           switch (msg["command"]) {
             case "game_description":
+              props.setTopic(msg["content"]["topic"]);
+              props.setQuestion(msg["content"]["question"]);
+              const explanationArgs: Explanation = {
+                description: msg["content"]["description"],
+                index: msg["content"]["index"],
+              }
+              props.setExplanations(props.explanations.concat(explanationArgs));
               if (isCorrect) {
                 props.setGameState(GameState.AnsweredAnswerer);
                 break;
               }
-              setExplanations(explanations.concat(msg["content"]));
               setStatus(AnswerState.SubmittingAnswer);
               break;
             case "game_answerer_checked":
@@ -90,13 +102,14 @@ export const Answerer: FC<Props> = (props) => {
               setStatus(AnswerState.Result);
               break;
             case "game_show_result":
+              props.setExplanations([]);
               props.moveResult(msg);
               break;
           }
         };
       }
     }
-  }, [isCorrect]);
+  }, [isCorrect, props.explanations]);
 
   const onSubmit: SubmitHandler<Topic> = (data) => {
     setAnswer(data.answer);
@@ -109,11 +122,6 @@ export const Answerer: FC<Props> = (props) => {
     socketRef.current?.send(JSON.stringify(sendJson));
     setStatus(AnswerState.WaitJudge);
     reset();
-  };
-
-  const backHome = function () {
-    props.setGameState(GameState.Init);
-    navigate("/");
   };
 
   switch (status) {
@@ -133,7 +141,7 @@ export const Answerer: FC<Props> = (props) => {
     return (
       <>
         <StyledPage>
-          <DescriptionList explanations={explanations}></DescriptionList>
+          <DescriptionList explanations={props.explanations}></DescriptionList>
           <StyledForm>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div>
@@ -173,7 +181,7 @@ export const Answerer: FC<Props> = (props) => {
     return (
       <>
         <StyledPage>
-          <DescriptionList explanations={explanations}></DescriptionList>
+          <DescriptionList explanations={props.explanations}></DescriptionList>
           <p>あなたの解答</p>
           <h2>{answer}</h2>
         </StyledPage>

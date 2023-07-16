@@ -17,11 +17,14 @@ type CorrectUserProps = {
 
 export const DescriptionList: FC<DescriptionProps> = (props) => {
   const descriptionList = [];
-  for (const content of props.explanations) {
+  for (const [idx, content] of props.explanations.entries()) {
     const steps = [content.description, 10];
     
-    descriptionList.push(<StyledUser key={content.index}><Typical steps={steps} loop={Infinity} wrapper="span" /></StyledUser>);
-    // descriptionList.push(<StyledUser key={content.index}>{content.description}</StyledUser>);
+    if (idx == props.explanations.length - 1) {
+      descriptionList.push(<StyledUser key={content.index}><Typical steps={steps} loop={Infinity} wrapper="span" /></StyledUser>);
+    } else {
+      descriptionList.push(<StyledUser key={content.index}>{content.description}</StyledUser>);
+    }
   }
 
   return (
