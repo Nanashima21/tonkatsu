@@ -104,6 +104,22 @@ export const StyledMessage = styled.p`
   color: #b3b3b3;
 `;
 
+export const StyledUserList = styled.div`
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  padding-top: 15px;
+  margin: 0 0 60px;
+`
+
+export const StyledUserListElem = styled.div`
+  flex: 1 1 50%;
+  width: 40%;
+  border-bottom: solid 3px #e0e0e0;
+  margin: 0 auto;
+  padding-top: 15px;
+`
+
 export const StyledLogo = styled.img`
   margin: 0 auto 20px;
   width: 300px;

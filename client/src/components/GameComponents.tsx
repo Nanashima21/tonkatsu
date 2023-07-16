@@ -1,6 +1,6 @@
 import { FC } from "react";
 import Typical from "react-typical";
-import { StyledUser } from "../Styled";
+import { StyledUser, StyledUserList, StyledUserListElem } from "../Styled";
 
 export type Explanation = {
   description: string;
@@ -42,13 +42,13 @@ export const CorrectUserList: FC<CorrectUserProps> = (props) => {
   }
 
   for (const [index, correctUser] of props.correctUsers.entries()) {
-    correctUserList.push(<StyledUser key={index}>{correctUser}</StyledUser>);
+    correctUserList.push(<StyledUserListElem><StyledUser key={index}>{correctUser}</StyledUser></StyledUserListElem>);
   }
 
   return (
     <>
       <h5>正解者</h5>
-      <div>{correctUserList}</div>
+      <StyledUserList>{correctUserList}</StyledUserList>
     </>
   )
 };
