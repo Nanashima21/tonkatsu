@@ -11,7 +11,8 @@ const AnswerState = {
   WaitQuestionerAnswer: 0,
   SubmittingAnswer: 1,
   WaitJudge: 2,
-  Result: 3
+  Result: 3,
+  Error: 4
 };
 
 type AnswerState = (typeof AnswerState)[keyof typeof AnswerState];
@@ -20,7 +21,6 @@ type Props = {
   socketRef: React.MutableRefObject<WebSocket | undefined>;
   setGameState: (state: GameState) => void;
   moveResult: (json: ResultJson) => void;
-  moveError: () => void;
 };
 
 type Topic = {
@@ -64,7 +64,7 @@ export const Answerer: FC<Props> = (props) => {
       // ソケットエラー
       if (socketRef.current) {
         socketRef.current.onerror = function () {
-          props.moveError();
+          setStatus(AnswerState.Error);
         };
       }
 
@@ -91,9 +91,6 @@ export const Answerer: FC<Props> = (props) => {
               break;
             case "game_show_result":
               props.moveResult(msg);
-              break;
-            case "game_disconnect":
-              props.moveError();
               break;
           }
         };
@@ -189,7 +186,9 @@ export const Answerer: FC<Props> = (props) => {
         <StyledPage>
           <CorrectUserList correctUsers={correctUserList}></CorrectUserList>
           <p>あなたは...</p>
-          <h2>{isCorrect ? ("正解!") : ("違うよ!")}</h2>
+          <div>
+          {isCorrect ? <h2 className="big_raibow">正解</h2>: <h2 className="sad_black">不正解</h2>}
+          </div>
         </StyledPage>
       </>
     );
@@ -198,7 +197,15 @@ export const Answerer: FC<Props> = (props) => {
     break;
   }
 
+  // エラー
   return (
-    <></>
+    <>
+      <StyledPage>
+        <h3>接続に失敗しました</h3>
+        <div>
+          <StyledButton onClick={backHome}>戻る</StyledButton>
+        </div>
+      </StyledPage>
+    </>
   );
 };
