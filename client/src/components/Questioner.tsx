@@ -14,7 +14,7 @@ import { StyledButton, StyledHr, StyledPage, StyledScreen, StyledAnswer, StyledE
 type Props = {
   socketRef: React.MutableRefObject<WebSocket | undefined>;
   setGameState: (state: GameState) => void;
-  moveResult: (json: ResultJson) => void;
+  moveResult: (json: ResultJson, flag: boolean) => void;
   moveError: () => void;
   isQuestioner: boolean;
   explanations: Explanation[];
@@ -138,7 +138,7 @@ export const Questioner: FC<Props> = (props) => {
               break;
             case "game_show_result":
               props.setExplanations([]);
-              props.moveResult(msg);
+              props.moveResult(msg, props.isQuestioner);
               break;
             case "game_disconnect":
               props.moveError();

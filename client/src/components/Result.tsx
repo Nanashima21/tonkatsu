@@ -9,6 +9,7 @@ type Props = {
   socketRef: React.MutableRefObject<WebSocket | undefined>;
   setGameState: (state: GameState) => void;
   result: ResultJson;
+  isQuestioner: boolean;
   moveAllResult: (json: AllResultJson) => void;
   moveError: () => void;
 };
@@ -83,7 +84,7 @@ export const Result: FC<Props> = (props) => {
       setTopic(objTopic);
       setGameResults(rank_array(props.result["content"]["result"]));
     }
-  }, []);
+  }, [props.result]);
 
   const rank_array = (array: Userscore[]) => {
     const rankedArray: Userscore[] = [];
@@ -139,7 +140,7 @@ export const Result: FC<Props> = (props) => {
           {isLast ? (
             <StyledButton onClick={finish_game}>最終結果を見る</StyledButton>
           ) : (
-            <StyledButton onClick={next_question}>次の問題に移る</StyledButton>
+            <>{props.isQuestioner ? (<StyledButton onClick={next_question}>次の問題に移る</StyledButton>) : (<></>)}</>
           )}
         </StyledScreen>
       </StyledPage>

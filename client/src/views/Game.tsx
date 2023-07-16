@@ -16,9 +16,10 @@ export const GameState = {
   Questioner: 2,
   AnsweredAnswerer: 3,
   Answerer: 4,
-  Result: 5,
-  AllResult: 6,
-  Error: 7,
+  ResultQuestioner: 5,
+  ResultAnswerer: 6,
+  AllResult: 7,
+  Error: 8,
 };
 
 export type GameState = (typeof GameState)[keyof typeof GameState];
@@ -72,17 +73,17 @@ export const Game = function () {
   const [gameState, setGameState] = useState<GameState>(GameState.Init);
   const [result, setResult] = useState<ResultJson>({
     command: "", 
-  content: {
-    result: [], 
-    question: "", 
-    questioner: ""
-  }
+    content: {
+      result: [], 
+      question: "", 
+      questioner: ""
+    }
   });
   const [allResult, setAllResult] = useState<AllResultJson>({
     command: "", 
-  content: {
-    result: [],
-  }
+    content: {
+      result: [],
+    }
   });
 
   const navigate = useNavigate();
@@ -103,9 +104,10 @@ export const Game = function () {
     }
   }, []);
 
-  const moveResult = (json: ResultJson) => {
+  const moveResult = (json: ResultJson, isQuestioner: boolean) => {
     setResult(json);
-    setGameState(GameState.Result);
+    if (isQuestioner) setGameState(GameState.ResultQuestioner);
+    else setGameState(GameState.ResultAnswerer);
   }
 
   const moveAllResult = (json: AllResultJson) => {
@@ -143,10 +145,16 @@ export const Game = function () {
           <Answerer socketRef={socketRef} setGameState={setGameState} moveResult={moveResult} moveError={moveError} explanations={explanations} setExplanations={setExplanations} topic={topic} setTopic={setTopic} question={question} setQuestion={setQuestion} />
         </>
       );
-    case GameState.Result:
+    case GameState.ResultQuestioner:
       return (
         <>
-          <Result socketRef={socketRef} setGameState={setGameState} result={result} moveAllResult={moveAllResult} moveError={moveError} />
+          <Result socketRef={socketRef} setGameState={setGameState} result={result} moveAllResult={moveAllResult} isQuestioner={true} moveError={moveError} />
+        </>
+      );
+    case GameState.ResultAnswerer:
+      return (
+        <>
+          <Result socketRef={socketRef} setGameState={setGameState} result={result} moveAllResult={moveAllResult} isQuestioner={false} moveError={moveError} />
         </>
       );
     case GameState.AllResult:
