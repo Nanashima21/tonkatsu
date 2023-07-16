@@ -76,28 +76,40 @@ export const AllResult: FC<Props> = (props) => {
           <VStack>
             <h2>最終順位</h2>
           </VStack>
-          <VStack alignItems="left" py="20px" px="150px" spacing="20px">
+          <VStack alignItems="center" py="20px" px="150px" spacing="20px">
             {gameResults.map((gameResult, i) => (
               
               <div style={styles.appeal}>
                 {Appeal}
-
-              <HStack key={i} className={"ranking-"+i}>
-              <style>
+                <style>
         {`@keyframes toLeft {
           0% {
-            transform: translateX(100%);
+            opacity: 0;
+            transform: translateX(900%);
           }
           100% {
-            transform: translateX(-100%);
+            opacity:1;
+            transform: translateX(0);
+          }
+        }
+        @keyframes dissappear{
+          0% {
+            transform: translateX(900%);
+          } 100% {
+            transform: translateX(900%);
           }
         }`}
       </style>
-                <Box width="50px">{gameResult.rank}位</Box>
-                <Box width="200px" style={{
-                  animation: `toLeft 1s infinite`
-                }}>{gameResult.userName}</Box>
-                <Box width="50px">{gameResult.score}pt</Box>
+
+              <HStack key={i} style={{
+                  opacity: `0`,
+                  animation: `toLeft 1s ${3.5-0.7*(gameResult.rank as number)}s forwards`,
+                  fontSize: `${0.6*(5-(gameResult.rank as number))}em`,
+                }}>
+              
+                <Box width="100px">{gameResult.rank}位</Box>
+                <Box width="300px">{gameResult.userName}</Box>
+                <Box width="200px">{gameResult.score}pt</Box>
               </HStack>
               </div>
             ))}
