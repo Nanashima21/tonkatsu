@@ -309,7 +309,7 @@ export const Questioner: FC<Props> = (props) => {
               <CorrectUserList correctUsers={correctUserList}></CorrectUserList>
               <StyledHr />
               <HStack>
-                { answererNum > 0 ? (
+                { props.explanations.length < 5 && answererNum > 0 ? (
                   <StyledButton onClick={next_explanation}>
                     次の説明に移る
                   </StyledButton>
