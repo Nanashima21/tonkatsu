@@ -103,7 +103,7 @@ export const AllResult: FC<Props> = (props) => {
 
               <HStack key={i} style={{
                   opacity: `0`,
-                  animation: `toLeft 1s ${3.5-0.7*(gameResult.rank as number)}s forwards`,
+                  animation: `toLeft 1s ${3.5-0.7*(gameResult.rank as number)}s forwards ${gameResult.rank as number===1 ? ", rainbow 0.5s infinite":""}`,
                   fontSize: `${0.6*(5-(gameResult.rank as number))}em`,
                 }}>
               
