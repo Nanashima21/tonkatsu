@@ -200,12 +200,12 @@ export const Answerer: FC<Props> = (props) => {
     return (
       <>
         <StyledPage>
-          <CorrectUserList correctUsers={correctUserList}></CorrectUserList>
-          <StyledHr></StyledHr>
           <h5>あなたは...</h5>
           <div>
           {isCorrect ? <h2 className="big_raibow">正解</h2>: <h2 className="sad_black">不正解</h2>}
           </div>
+          <StyledHr />
+          <CorrectUserList correctUsers={correctUserList}></CorrectUserList>
         </StyledPage>
       </>
     );
