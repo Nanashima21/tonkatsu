@@ -128,3 +128,8 @@ export const StyledUserListElem = styled.div`
   margin: 0 auto;
   padding-top: 15px;
 `
+
+export const StyledLogo = styled.img`
+  margin: 0 auto 20px;
+  width: 300px;
+`
