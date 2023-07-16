@@ -110,7 +110,7 @@ func AskChatGPT(keyword string, gamemode string) []string {
 	case "easy":
 		prompt = "[[KEYWORD]]に関する説明を5箇条で書いてください。日本語で書いてください。[[KEYWORD]]という言葉は絶対に使わないでください。"
 	case "hard":
-		prompt = "[[KEYWORD]]に関する説明を5箇条で書いてください。日本語で書いてください。[[KEYWORD]]という言葉は絶対に使わないでください。分かりにくく書いてください。"
+		prompt = "[[KEYWORD]]に関する説明を5箇条で書いてください。日本語で書いてください。極めて抽象的に記述してください。[[KEYWORD]]という言葉は絶対に使わないでください。分かりにくく書いてください。"
 	case "chinese":
 		prompt = "[[KEYWORD]]に関する説明を5箇条で書いてください。中国語で書いてください。[[KEYWORD]]という言葉は絶対に使わないでください。"
 	case "english":

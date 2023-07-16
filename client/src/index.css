@@ -33,9 +33,68 @@ body {
 
 h1 {
   font-size: 3.2em;
-  line-height: 1.1;
 }
 
+h2 {
+  font-size: 2.5em;
+}
+
+h3 {
+  font-size: 2em;
+}
+
+h4 {
+  font-size: 1.6em;
+}
+
+h5 {
+  font-size: 1.2em;
+}
+
+
+@keyframes rainbow {
+  0% {
+    color: red;
+  }
+  14% {
+    color: orange;
+  }
+  28% {
+    color: yellow;
+  }
+  42% {
+    color: green;
+  }
+  57% {
+    color: blue;
+  }
+  71% {
+    color: indigo;
+  }
+  85% {
+    color: violet;
+  }
+  100% {
+    color: red;
+  }
+}
+@keyframes zoom {
+  0%{
+    transform: scale(0.1);
+  }
+  100%{
+    transform: scale(1);
+  }
+}
+
+.big_raibow{
+  font-size: 15em;
+  animation: rainbow 0.5s infinite, zoom 0.5s;
+  font-style: oblique;
+}
+.sad_black{
+  font-size: 10em;
+}
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
