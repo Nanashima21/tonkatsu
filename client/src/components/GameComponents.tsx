@@ -36,7 +36,7 @@ export const DescriptionList: FC<DescriptionProps> = (props) => {
 
 export const CorrectUserList: FC<CorrectUserProps> = (props) => {
   const correctUserList = [];
-  if (correctUserList.length == 0) {
+  if (props.correctUsers.length == 0) {
     correctUserList.push(<h4>いませんでした...</h4>)
   }
 
