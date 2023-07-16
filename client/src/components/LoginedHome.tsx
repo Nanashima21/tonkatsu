@@ -79,7 +79,7 @@ export const LoginedHome = () => {
   return (
     <>
       <StyledPage>
-        <p>userID : {cookies.userID}</p>
+        <h5>userID : {cookies.userID}</h5>
         <StyledForm>
           <form onSubmit={handleSubmit(joinButton)}>
             <div>

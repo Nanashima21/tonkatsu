@@ -11,8 +11,7 @@ export const StyledCheckbox = styled.div`
 
 export const StyledHr = styled.hr`
   border-color: #646cff;
-  margin-top: 30px;
-  margin-bottom: 10px;
+  margin: 20px auto 10px auto;
   width: 360px;
 `;
 
