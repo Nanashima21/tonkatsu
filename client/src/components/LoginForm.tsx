@@ -76,7 +76,7 @@ export const LoginForm: FC<Props> = (props) => {
     <>
       <StyledPage>
         <StyledForm>
-          {props.isLogin ? <h3>ログイン</h3> : <h3>新規登録</h3>}
+          {props.isLogin ? <h4>ログイン</h4> : <h4>新規登録</h4>}
           <form
             action={props.isLogin ? "/" : "/account"}
             method="GET"
