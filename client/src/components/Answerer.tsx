@@ -146,6 +146,7 @@ export const Answerer: FC<Props> = (props) => {
       <>
         <StyledPage>
           <StyledForm>
+            <h5 style={{marginBottom: 16}}>トピック： {props.topic}</h5>
             <DescriptionList explanations={props.explanations} isQuestioner={false}></DescriptionList>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div style={{marginTop: 40}}>
@@ -187,6 +188,7 @@ export const Answerer: FC<Props> = (props) => {
       <>
         <StyledPage>
           <StyledForm>
+            <h5 style={{marginBottom: 16}}>トピック： {props.topic}</h5>
             <DescriptionList explanations={props.explanations} isQuestioner={false}></DescriptionList>
             <StyledHr style={{marginTop: 50, marginBottom: 20}}></StyledHr>
             <h5>あなたの解答</h5>

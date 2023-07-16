@@ -123,25 +123,36 @@ export const Result: FC<Props> = (props) => {
       <StyledPage>
         <StyledScreen>
           <VStack>
-            <h2>順位</h2>
-            <h2>
+            <h3>順位</h3>
+            <h4>
               {topic.questioner}さんの回答 : {topic.question}
-            </h2>
+            </h4>
           </VStack>
           <VStack alignItems="left" py="20px" px="150px" spacing="20px">
             {gameResults.map((gameResult, i) => (
               <HStack key={i}>
-                <Box width="50px">{gameResult.rank}位</Box>
-                <Box width="200px">{gameResult.userName}</Box>
-                <Box width="50px">{gameResult.score}pt</Box>
+                <Box width="50px"><h5>{gameResult.rank}位</h5></Box>
+                <Box width="200px"><h5>{gameResult.userName}</h5></Box>
+                <Box width="50px"><h5>{gameResult.score}pt</h5></Box>
               </HStack>
             ))}
           </VStack>
-          <StyledHr />
           {isLast ? (
-            <StyledButton onClick={finish_game}>最終結果を見る</StyledButton>
+            <>
+              <StyledHr />
+              <StyledButton onClick={finish_game}>最終結果を見る</StyledButton>
+            </>
           ) : (
-            <>{props.isQuestioner ? (<StyledButton onClick={next_question}>次の問題に移る</StyledButton>) : (<></>)}</>
+            <>
+              {props.isQuestioner ? (
+                <>
+                  <StyledHr />
+                  <StyledButton onClick={next_question}>次の問題に移る</StyledButton>
+                </>
+              ) : (
+                <></>
+              )}
+            </>
           )}
         </StyledScreen>
       </StyledPage>
