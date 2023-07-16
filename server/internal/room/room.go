@@ -116,6 +116,13 @@ func (r *Room) handleMessagesInWaiting() bool {
 				case CmdClientStartGame:
 					r.context.GameMode = string(m.Content.(ClientMsgGameMode))
 					return false
+				case CmdClientDisconnect:
+					r.cancelSubscribe(userId)
+					names := r.userNames()
+					r.broadCast(&RoomMessage{
+						Command: CmdRoomUsersInRoom,
+						Content: names,
+					})
 				default:
 				}
 			default:
