@@ -5,7 +5,7 @@ import { ErrorMessage } from "@hookform/error-message";
 import { GameState, ResultJson } from "../views/Game";
 import { Explanation, DescriptionList, CorrectUserList } from "./GameComponents";
 import { useCookies } from "react-cookie";
-import { StyledButton, StyledPage, StyledForm, StyledErrorMessage, StyledInput } from "../Styled";
+import { StyledButton, StyledPage, StyledForm, StyledErrorMessage, StyledInput, StyledHr } from "../Styled";
 
 const AnswerState = {
   WaitQuestionerAnswer: 0,
@@ -195,11 +195,12 @@ export const Answerer: FC<Props> = (props) => {
     return (
       <>
         <StyledPage>
-          <CorrectUserList correctUsers={correctUserList}></CorrectUserList>
           <p>あなたは...</p>
           <div>
           {isCorrect ? <h2 className="big_raibow">正解</h2>: <h2 className="sad_black">不正解</h2>}
           </div>
+          <StyledHr />
+          <CorrectUserList correctUsers={correctUserList}></CorrectUserList>
         </StyledPage>
       </>
     );
