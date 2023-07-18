@@ -31,7 +31,7 @@ export const StyledButton = styled.button`
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
-  margin: 1em;
+  margin: 1em auto 1em auto;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
