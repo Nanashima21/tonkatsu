@@ -1,5 +1,5 @@
 import { FC } from "react";
-import Typical from "react-typical";
+// import Typical from "react-typical";
 import { StyledUser, StyledUserList, StyledUserListElem } from "../Styled";
 
 export type Explanation = {
@@ -22,7 +22,7 @@ export const DescriptionList: FC<DescriptionProps> = (props) => {
     const steps = [content.description, 10];
     
     if (idx == props.explanations.length - 1 && !props.isQuestioner) {
-      descriptionList.push(<li key={content.index}><h5><Typical steps={steps} loop={Infinity} wrapper="span" /></h5></li>);
+      descriptionList.push(<li><h5 key={content.index}>{content.description}</h5></li>);
     } else {
       descriptionList.push(<li><h5 key={content.index}>{content.description}</h5></li>);
     }
