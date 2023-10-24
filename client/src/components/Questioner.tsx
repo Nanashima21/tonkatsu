@@ -1,15 +1,27 @@
 import React, { FC, useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { ErrorMessage } from "@hookform/error-message";
 import { HStack, VStack } from "@chakra-ui/react";
 import styled from "styled-components";
 import { GameState, ResultJson } from "../views/Game";
-import { Explanation, DescriptionList, CorrectUserList } from "./GameComponents";
+import {
+  Explanation,
+  DescriptionList,
+  CorrectUserList,
+} from "./GameComponents";
 import { useSelector } from "react-redux";
 import { Answerer } from "./Answerer";
-import { StyledButton, StyledHr, StyledPage, StyledScreen, StyledAnswer, StyledErrorMessage, StyledForm, StyledInput, StyledUser } from "../Styled";
-
+import {
+  StyledButton,
+  StyledHr,
+  StyledPage,
+  StyledScreen,
+  StyledAnswer,
+  StyledErrorMessage,
+  StyledForm,
+  StyledInput,
+  StyledUser,
+} from "../Styled";
 
 type Props = {
   socketRef: React.MutableRefObject<WebSocket | undefined>;
@@ -19,9 +31,9 @@ type Props = {
   isQuestioner: boolean;
   explanations: Explanation[];
   setExplanations: (state: Explanation[]) => void;
-  topic: string,
+  topic: string;
   setTopic: (state: string) => void;
-  question: string,
+  question: string;
   setQuestion: (state: string) => void;
 };
 
@@ -45,7 +57,7 @@ const QuestionerState = {
   SubmittingQuestion: 0,
   JudgingAnswer: 1,
   Result: 2,
-  Wait: 3
+  Wait: 3,
 };
 
 type QuestionerState = (typeof QuestionerState)[keyof typeof QuestionerState];
@@ -70,26 +82,28 @@ export const Questioner: FC<Props> = (props) => {
   const [answerers, setAnswerers] = useState<Answerer[]>(() => []);
   const [correctUserList, setCorrectUserList] = useState<string[]>([]);
 
-  const [status, setStatus] = useState<QuestionerState>(QuestionerState.SubmittingQuestion);
+  const [status, setStatus] = useState<QuestionerState>(
+    QuestionerState.SubmittingQuestion
+  );
 
   useEffect(() => {
     console.log(answerers);
     let judgedCnt = answerers.reduce((cnt: number, answerer: Answerer) => {
-      return cnt + (answerer.isJudged ? 1 : 0)
+      return cnt + (answerer.isJudged ? 1 : 0);
     }, 0);
     let CorrectCnt = answerers.reduce((cnt: number, answerer: Answerer) => {
-      return cnt + (answerer.isCorrect == 1 ? 1 : 0)
+      return cnt + (answerer.isCorrect == 1 ? 1 : 0);
     }, 0);
     console.log(judgedCnt, CorrectCnt, answererNum);
     if (judgedCnt == answererNum) {
-      setAnswererNum((answererNum) => answererNum - CorrectCnt)
+      setAnswererNum((answererNum) => answererNum - CorrectCnt);
       var sendJsonCheck = {
         command: "game_questioner_check",
         content: { correctUserList },
       };
       socketRef.current?.send(JSON.stringify(sendJsonCheck));
-    }  
-  }, [answerers])
+    }
+  }, [answerers]);
 
   // WebSocket
   useEffect(() => {
@@ -120,7 +134,7 @@ export const Questioner: FC<Props> = (props) => {
               const explanationArgs: Explanation = {
                 description: msg["content"]["description"],
                 index: msg["content"]["index"],
-              }
+              };
               props.setExplanations(props.explanations.concat(explanationArgs));
               setStatus(QuestionerState.JudgingAnswer);
               break;
@@ -170,11 +184,12 @@ export const Questioner: FC<Props> = (props) => {
     }
     setAnswerers((answerers) => {
       answerers[idx].isJudged = true;
-      answerers[idx].isCorrect = flag ? 1 : 2
+      answerers[idx].isCorrect = flag ? 1 : 2;
       return [...answerers];
     });
 
-    if (flag) setCorrectUserList((CorrectUserList) => CorrectUserList.concat(ans.user));
+    if (flag)
+      setCorrectUserList((CorrectUserList) => CorrectUserList.concat(ans.user));
   };
 
   const next_explanation = () => {
@@ -188,7 +203,6 @@ export const Questioner: FC<Props> = (props) => {
   };
 
   switch (status) {
-
     case QuestionerState.SubmittingQuestion:
       if (props.isQuestioner) {
         return (
@@ -239,7 +253,6 @@ export const Questioner: FC<Props> = (props) => {
         </>
       );
 
-    
     case QuestionerState.JudgingAnswer:
       return (
         <>
@@ -247,14 +260,24 @@ export const Questioner: FC<Props> = (props) => {
             <StyledScreen>
               <VStack>
                 <h5>質問：{props.topic}</h5>
-                <h5 style={{marginBottom: 20}}>{props.isQuestioner ? "送信したお題" : "お題"} : {props.question}</h5>
-                <DescriptionList explanations={props.explanations} isQuestioner={true}></DescriptionList>
+                <h5 style={{ marginBottom: 20 }}>
+                  {props.isQuestioner ? "送信したお題" : "お題"} :{" "}
+                  {props.question}
+                </h5>
+                <DescriptionList
+                  explanations={props.explanations}
+                  isQuestioner={true}
+                ></DescriptionList>
               </VStack>
               <VStack alignItems="left" p="20px" spacing="30px">
                 {answerers.map((answerer, i) => (
                   <HStack key={i}>
                     <VStack spacing={0}>
-                      <img src="/src/assets/icon-user.png" width="40" style={{paddingTop: 12}}></img>
+                      <img
+                        src="/src/assets/icon-user.png"
+                        width="40"
+                        style={{ paddingTop: 12 }}
+                      ></img>
                       <p>{answerer.user}</p>
                     </VStack>
                     {props.isQuestioner ? (
@@ -263,12 +286,18 @@ export const Questioner: FC<Props> = (props) => {
                         {answerer.isCorrect != 0 ? (
                           <>
                             <StyledAnswer>
-                              <h5>{answerer.isCorrect == 1 ? "正解！" : "不正解..."}</h5>
+                              <h5>
+                                {answerer.isCorrect == 1
+                                  ? "正解！"
+                                  : "不正解..."}
+                              </h5>
                             </StyledAnswer>
                           </>
                         ) : (
                           <>
-                            <StyledAnswer style={{ marginRight: 20 }}><h5>{answerer.answer}</h5></StyledAnswer>
+                            <StyledAnswer style={{ marginRight: 20 }}>
+                              <h5>{answerer.answer}</h5>
+                            </StyledAnswer>
                             <StyledQuizButton
                               onClick={() => judge(true, answerer)}
                               style={{ marginRight: 5, marginTop: 15 }}
@@ -287,7 +316,9 @@ export const Questioner: FC<Props> = (props) => {
                     ) : (
                       // 正解した解答者
                       <>
-                        <StyledAnswer><h5>{answerer.answer}</h5></StyledAnswer>
+                        <StyledAnswer>
+                          <h5>{answerer.answer}</h5>
+                        </StyledAnswer>
                       </>
                     )}
                   </HStack>
@@ -297,7 +328,7 @@ export const Questioner: FC<Props> = (props) => {
           </StyledPage>
         </>
       );
-  
+
     case QuestionerState.Result:
       if (props.isQuestioner) {
         return (
@@ -306,11 +337,13 @@ export const Questioner: FC<Props> = (props) => {
               <CorrectUserList correctUsers={correctUserList}></CorrectUserList>
               <StyledHr />
               <HStack>
-                { props.explanations.length < 5 && answererNum > 0 ? (
+                {props.explanations.length < 5 && answererNum > 0 ? (
                   <StyledButton onClick={next_explanation}>
                     次の説明に移る
                   </StyledButton>
-                ):(<></>) }
+                ) : (
+                  <></>
+                )}
                 <StyledButton onClick={question_done}>
                   この問題を終了する
                 </StyledButton>
@@ -328,8 +361,7 @@ export const Questioner: FC<Props> = (props) => {
         </>
       );
 
-
-    // chatGPT の回答待ち  
+    // chatGPT の回答待ち
     case QuestionerState.Wait:
       return (
         <>
@@ -343,9 +375,7 @@ export const Questioner: FC<Props> = (props) => {
       break;
   }
 
-  return (
-    <></>
-  );
+  return <></>;
 };
 
 const StyledQuizButton = styled.button<ButtonProps>`

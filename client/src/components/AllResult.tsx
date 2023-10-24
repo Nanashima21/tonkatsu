@@ -1,10 +1,9 @@
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, HStack, VStack } from "@chakra-ui/react";
 import { GameState, AllResultJson } from "../views/Game";
 import { StyledButton, StyledPage, StyledScreen, StyledHr } from "../Styled";
-import App from "../App";
-import snareRoll from "../assets/snare_roll.mp3"
+import snareRoll from "../assets/snare_roll.mp3";
 
 type Props = {
   setGameState: (state: GameState) => void;
@@ -48,8 +47,8 @@ export const AllResult: FC<Props> = (props) => {
   }, []);
 
   useEffect(() => {
-    audio.play()
-  }, [])
+    audio.play();
+  }, []);
 
   const backHome = function () {
     props.setGameState(GameState.Init);
@@ -67,16 +66,14 @@ export const AllResult: FC<Props> = (props) => {
     </style>
   );
 
-  const styles = ({
+  const styles = {
     appeal: {
       animation: "appeal infinite 20s linear;",
     },
-  });
-  
+  };
 
   return (
     <>
-      
       <StyledPage>
         <StyledScreen>
           <VStack>
@@ -84,39 +81,46 @@ export const AllResult: FC<Props> = (props) => {
           </VStack>
           <VStack alignItems="center" py="20px" px="150px" spacing="20px">
             {gameResults.map((gameResult, i) => (
-              
               <div style={styles.appeal}>
                 {Appeal}
                 <style>
-        {`@keyframes toLeft {
-          0% {
-            opacity: 0;
-            transform: translateX(900%);
-          }
-          100% {
-            opacity:1;
-            transform: translateX(0);
-          }
-        }
-        @keyframes dissappear{
-          0% {
-            transform: translateX(900%);
-          } 100% {
-            transform: translateX(900%);
-          }
-        }`}
-      </style>
+                  {`@keyframes toLeft {
+                    0% {
+                      opacity: 0;
+                      transform: translateX(900%);
+                    }
+                    100% {
+                      opacity:1;
+                      transform: translateX(0);
+                    }
+                  }
+                  @keyframes dissappear{
+                    0% {
+                      transform: translateX(900%);
+                    } 100% {
+                      transform: translateX(900%);
+                    }
+                  }`}
+                </style>
 
-              <HStack key={i} style={{
-                  opacity: `0`,
-                  animation: `toLeft 1s ${3.5-0.7*(gameResult.rank as number)}s forwards ${gameResult.rank as number===1 ? ", rainbow 0.5s infinite":""}`,
-                  fontSize: `${0.6*(5-(gameResult.rank as number))}em`,
-                }}>
-              
-                <Box width="100px">{gameResult.rank}位</Box>
-                <Box width="300px">{gameResult.userName}</Box>
-                <Box width="200px">{gameResult.score}pt</Box>
-              </HStack>
+                <HStack
+                  key={i}
+                  style={{
+                    opacity: `0`,
+                    animation: `toLeft 1s ${
+                      3.5 - 0.7 * (gameResult.rank as number)
+                    }s forwards ${
+                      (gameResult.rank as number) === 1
+                        ? ", rainbow 0.5s infinite"
+                        : ""
+                    }`,
+                    fontSize: `${0.6 * (5 - (gameResult.rank as number))}em`,
+                  }}
+                >
+                  <Box width="100px">{gameResult.rank}位</Box>
+                  <Box width="300px">{gameResult.userName}</Box>
+                  <Box width="200px">{gameResult.score}pt</Box>
+                </HStack>
               </div>
             ))}
           </VStack>

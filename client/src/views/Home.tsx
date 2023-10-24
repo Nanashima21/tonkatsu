@@ -3,7 +3,7 @@ import { LoginedHome } from "../components/LoginedHome";
 import { NotLoginedHome } from "../components/NotLoginedHome";
 
 const Home = () => {
-  const [cookies, setCookie] = useCookies(["userID"]);
+  const [cookies] = useCookies(["userID"]);
   return <>{cookies.userID ? <LoginedHome /> : <NotLoginedHome />}</>;
 };
 

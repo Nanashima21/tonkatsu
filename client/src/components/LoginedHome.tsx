@@ -5,7 +5,15 @@ import { useCookies } from "react-cookie";
 import { ErrorMessage } from "@hookform/error-message";
 import { useDispatch } from "react-redux";
 import { becomeOwner, createRoom } from "../app/user/userSlice";
-import { StyledButton, StyledPage, StyledForm, StyledErrorMessage, StyledInput, StyledHr, StyledLogo } from "../Styled";
+import {
+  StyledButton,
+  StyledPage,
+  StyledForm,
+  StyledErrorMessage,
+  StyledInput,
+  StyledHr,
+  StyledLogo,
+} from "../Styled";
 
 type RoomId = {
   id: string;
@@ -40,7 +48,7 @@ export const LoginedHome = () => {
 
   const createButton = () => {
     const xmlHttpRequest = new XMLHttpRequest();
-    xmlHttpRequest.withCredentials = true
+    xmlHttpRequest.withCredentials = true;
     let url = "http://localhost:8000/room";
     xmlHttpRequest.open("POST", url);
     xmlHttpRequest.send();
@@ -69,18 +77,21 @@ export const LoginedHome = () => {
     xmlHttpRequest.withCredentials = true;
     let url = "http://localhost:8000/logout";
     xmlHttpRequest.open("POST", url);
-    xmlHttpRequest.send()
+    xmlHttpRequest.send();
 
     xmlHttpRequest.onreadystatechange = () => {
-      navigate("/")
-    }
+      navigate("/");
+    };
   };
 
   return (
     <>
       <StyledPage>
         <StyledForm>
-          <StyledLogo style={{width: 300}} src="/src/assets/logo.png"></StyledLogo>
+          <StyledLogo
+            style={{ width: 300 }}
+            src="/src/assets/logo.png"
+          ></StyledLogo>
           <h5>userID : {cookies.userID}</h5>
           <form onSubmit={handleSubmit(joinButton)}>
             <div>

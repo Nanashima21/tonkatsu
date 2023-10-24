@@ -3,7 +3,14 @@ import { useCookies } from "react-cookie";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { Link, useNavigate } from "react-router-dom";
-import { StyledButton, StyledPage, StyledForm, StyledErrorMessage, StyledInput, StyledMessage } from "../Styled";
+import {
+  StyledButton,
+  StyledPage,
+  StyledForm,
+  StyledErrorMessage,
+  StyledInput,
+  StyledMessage,
+} from "../Styled";
 
 type Props = {
   isLogin: boolean;
@@ -33,7 +40,7 @@ export const LoginForm: FC<Props> = (props) => {
     console.log(data.userName);
     console.log(data.password);
     const xmlHttpRequest = new XMLHttpRequest();
-    xmlHttpRequest.withCredentials = true
+    xmlHttpRequest.withCredentials = true;
     let url;
     if (props.isLogin) {
       url = "http://localhost:8000/login";

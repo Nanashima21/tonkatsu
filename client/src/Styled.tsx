@@ -1,19 +1,88 @@
 import styled from "styled-components";
 
+export const StyledNavbar = styled.nav`
+  background-color: #666;
+  justify-content: space-between;
+  display: flex;
+  width: 100%;
+  height: 65px;
+  a {
+    text-decoration: none;
+    color: #fff;
+    padding: 10px 20px 10px 10px;
+    display: block;
+    font-size: large;
+    font-weight: 800;
+  }
+`;
+
+export const StyledFooter = styled.footer`
+  background-color: #666;
+  height: 100px;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: sticky;
+  top: 100vh;
+`;
+
 export const StyledCheckboxLabel = styled.div`
   margin-left: 10px;
   display: inline-block;
-`
+`;
 
 export const StyledCheckbox = styled.div`
   padding: 5px 0 5px 140px;
-`
+`;
+
+export const StyledRadioButtonGroup = styled.div`
+  width: 100%;
+  .item {
+    width: 100%;
+    margin-bottom: 10%;
+  }
+  .radio-button {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+  .radio-button + label {
+    border-radius: 8px;
+    padding: 10px 10px;
+    width: auto;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    color: #555;
+    background-color: #ffffff;
+    display: block;
+    &:hover {
+      border-color: #646cff;
+    }
+    &:focus,
+    &:focus-visible {
+      outline: 4px auto -webkit-focus-ring-color;
+    }
+  }
+  .radio-button:checked + label {
+    background-color: #1ba0ff;
+    color: #fff;
+  }
+`;
 
 export const StyledHr = styled.hr`
   border-color: #646cff;
-  margin-top: 30px;
-  margin-bottom: 10px;
-  width: 100%;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  width: 95%;
+`;
+
+export const StyledVr = styled.hr`
+  border-color: #646cff;
+  margin-left: 0px;
+  margin-right: 0px;
+  height: 95%;
 `;
 
 export const StyledUser = styled.h5`
@@ -23,8 +92,9 @@ export const StyledUser = styled.h5`
 `;
 
 export const StyledPage = styled.div`
-  padding: 100px 0px;
-  min-width: 400px;
+  height: 90%;
+  background-color: #ba7d5b;
+  padding-top: 50px;
 `;
 
 export const StyledButton = styled.button`
@@ -35,8 +105,8 @@ export const StyledButton = styled.button`
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  width: 300px;
-  background-color: #f9f9f9;
+  width: 50%;
+  background-color: #d9d9d9;
   cursor: pointer;
   transition: border-color 0.25s;
   &:hover {
@@ -49,25 +119,41 @@ export const StyledButton = styled.button`
 `;
 
 export const StyledScreen = styled.div`
-  border-radius: 20px;
+  border-radius: 30px;
   position: relative;
   z-index: 1;
   background: #ffffff;
-  width: 700px;
-  margin: 0 auto 100px;
-  padding: 45px;
+  width: 85%;
+  height: 90%;
+  margin-left: 7.5%;
   text-align: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 `;
 
+export const StyledUsers = styled.div`
+  border-radius: 30px;
+  position: relative;
+  z-index: 1;
+  background: #d9d9d9;
+  width: 85%;
+  height: 90%;
+  margin-bottom: 7.5%;
+  text-align: center;
+`;
+
+export const StyledIcon = styled.img`
+  border-radius: 100px;
+  width: 60%;
+`;
+
 export const StyledForm = styled.div`
-  border-radius: 20px;
+  border-radius: 30px;
   position: relative;
   z-index: 1;
   background: #ffffff;
-  width: 500px;
-  margin: 0 auto 100px;
-  padding: 45px;
+  width: 85%;
+  height: 90%;
+  margin-left: 7.5%;
   text-align: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 `;
@@ -111,7 +197,7 @@ export const StyledUserList = styled.div`
   justify-content: center;
   padding-top: 15px;
   margin: 0 0 60px;
-`
+`;
 
 export const StyledUserListElem = styled.div`
   flex: 1 1 50%;
@@ -119,9 +205,9 @@ export const StyledUserListElem = styled.div`
   border-bottom: solid 3px #e0e0e0;
   margin: 0 auto;
   padding-top: 15px;
-`
+`;
 
 export const StyledLogo = styled.img`
   margin: 0 auto 20px;
   width: 300px;
-`
+`;
