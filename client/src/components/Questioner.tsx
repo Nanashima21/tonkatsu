@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
-import { HStack, VStack } from "@chakra-ui/react";
+import { Box, HStack, VStack } from "@chakra-ui/react";
 import styled from "styled-components";
 import { GameState, ResultJson } from "../views/Game";
 import {
@@ -20,7 +20,6 @@ import {
   StyledErrorMessage,
   StyledForm,
   StyledInput,
-  StyledUser,
 } from "../Styled";
 
 type Props = {
@@ -207,125 +206,127 @@ export const Questioner: FC<Props> = (props) => {
       if (props.isQuestioner) {
         return (
           <>
-            <StyledPage>
-              <StyledForm>
-                <h5>質問：{props.topic}</h5>
-                <form onSubmit={handleSubmit(onSubmit)}>
+            <VStack width="70%">
+              <h5>質問：{props.topic}</h5>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <div>
                   <div>
-                    <div>
-                      <StyledInput
-                        id="question"
-                        type="text"
-                        {...register("question", {
-                          required: "解答を入力してください",
-                          maxLength: {
-                            value: 30,
-                            message: "30文字以内で入力してください",
-                          },
-                          pattern: {
-                            value: /^[A-Za-z0-9ぁ-んーァ-ヶーｱ-ﾝﾞﾟ一-龠]+$/i,
-                            message: "入力の形式が不正です",
-                          },
-                        })}
-                      />
-                    </div>
-                    <StyledErrorMessage>
-                      <ErrorMessage
-                        errors={errors}
-                        name="question"
-                        render={({ message }) => <span>{message}</span>}
-                      />
-                    </StyledErrorMessage>
-                    <StyledButton type="submit">送信</StyledButton>
+                    <StyledInput
+                      id="question"
+                      type="text"
+                      {...register("question", {
+                        required: "解答を入力してください",
+                        maxLength: {
+                          value: 30,
+                          message: "30文字以内で入力してください",
+                        },
+                        pattern: {
+                          value: /^[A-Za-z0-9ぁ-んーァ-ヶーｱ-ﾝﾞﾟ一-龠]+$/i,
+                          message: "入力の形式が不正です",
+                        },
+                      })}
+                    />
                   </div>
-                </form>
-              </StyledForm>
-            </StyledPage>
+                  <StyledErrorMessage>
+                    <ErrorMessage
+                      errors={errors}
+                      name="question"
+                      render={({ message }) => <span>{message}</span>}
+                    />
+                  </StyledErrorMessage>
+                  <StyledButton type="submit">送信</StyledButton>
+                </div>
+              </form>
+            </VStack>
           </>
         );
       }
 
       return (
         <>
-          <StyledPage>
+          <Box width="70%">
             <h3>待機中...</h3>
-          </StyledPage>
+          </Box>
         </>
       );
 
     case QuestionerState.JudgingAnswer:
       return (
         <>
-          <StyledPage>
-            <StyledScreen>
-              <VStack>
-                <h5>質問：{props.topic}</h5>
-                <h5 style={{ marginBottom: 20 }}>
-                  {props.isQuestioner ? "送信したお題" : "お題"} :{" "}
-                  {props.question}
-                </h5>
-                <DescriptionList
-                  explanations={props.explanations}
-                  isQuestioner={true}
-                ></DescriptionList>
-              </VStack>
-              <VStack alignItems="left" p="20px" spacing="30px">
-                {answerers.map((answerer, i) => (
-                  <HStack key={i}>
-                    <VStack spacing={0}>
-                      <img
-                        src="/src/assets/icon-user.png"
-                        width="40"
-                        style={{ paddingTop: 12 }}
-                      ></img>
-                      <p>{answerer.user}</p>
-                    </VStack>
-                    {props.isQuestioner ? (
-                      // 出題者
-                      <>
-                        {answerer.isCorrect != 0 ? (
-                          <>
-                            <StyledAnswer>
-                              <h5>
-                                {answerer.isCorrect == 1
-                                  ? "正解！"
-                                  : "不正解..."}
-                              </h5>
-                            </StyledAnswer>
-                          </>
-                        ) : (
-                          <>
-                            <StyledAnswer style={{ marginRight: 20 }}>
-                              <h5>{answerer.answer}</h5>
-                            </StyledAnswer>
-                            <StyledQuizButton
-                              onClick={() => judge(true, answerer)}
-                              style={{ marginRight: 5, marginTop: 15 }}
-                            >
-                              <img src="/src/assets/icon-maru.png"></img>
-                            </StyledQuizButton>
-                            <StyledQuizButton
-                              onClick={() => judge(false, answerer)}
-                              style={{ marginTop: 15 }}
-                            >
-                              <img src="/src/assets/icon-batsu.png"></img>
-                            </StyledQuizButton>
-                          </>
-                        )}
-                      </>
-                    ) : (
-                      // 正解した解答者
-                      <>
-                        <StyledAnswer>
-                          <h5>{answerer.answer}</h5>
-                        </StyledAnswer>
-                      </>
-                    )}
-                  </HStack>
-                ))}
-              </VStack>
-            </StyledScreen>
-          </StyledPage>
+          <VStack width="70%">
+            <VStack>
+              <h5>質問：{props.topic}</h5>
+              <h5 style={{ marginBottom: 20 }}>
+                {props.isQuestioner ? "送信したお題" : "お題"} :{" "}
+                {props.question}
+              </h5>
+              <DescriptionList
+                explanations={props.explanations}
+                isQuestioner={true}
+              ></DescriptionList>
+            </VStack>
+            <VStack alignItems="left" p="20px" spacing="30px">
+              {answerers.map((answerer, i) => (
+                <HStack key={i}>
+                  <VStack spacing={0}>
+                    <img
+                      src="/src/assets/icon-user.png"
+                      width="40"
+                      style={{ paddingTop: 12 }}
+                    ></img>
+                    <p>{answerer.user}</p>
+                  </VStack>
+                  {props.isQuestioner ? (
+                    // 出題者
+                    <>
+                      {answerer.isCorrect != 0 ? (
+                        <>
+                          <StyledAnswer>
+                            <h5>
+                              {answerer.isCorrect == 1 ? "正解！" : "不正解..."}
+                            </h5>
+                          </StyledAnswer>
+                        </>
+                      ) : (
+                        <>
+                          <StyledAnswer style={{ marginRight: 20 }}>
+                            <h5>{answerer.answer}</h5>
+                          </StyledAnswer>
+                          <StyledQuizButton
+                            onClick={() => judge(true, answerer)}
+                            style={{ marginRight: 5, marginTop: 15 }}
+                          >
+                            <img
+                              width="10px"
+                              height="10px"
+                              src="/src/assets/icon-maru.png"
+                            ></img>
+                          </StyledQuizButton>
+                          <StyledQuizButton
+                            onClick={() => judge(false, answerer)}
+                            style={{ marginTop: 15 }}
+                          >
+                            <img
+                              width="10px"
+                              height="10px"
+                              src="/src/assets/icon-batsu.png"
+                            ></img>
+                          </StyledQuizButton>
+                        </>
+                      )}
+                    </>
+                  ) : (
+                    // 正解した解答者
+                    <>
+                      <StyledAnswer>
+                        <h5>{answerer.answer}</h5>
+                      </StyledAnswer>
+                    </>
+                  )}
+                </HStack>
+              ))}
+            </VStack>
+          </VStack>
         </>
       );
 
@@ -333,7 +334,7 @@ export const Questioner: FC<Props> = (props) => {
       if (props.isQuestioner) {
         return (
           <>
-            <StyledPage>
+            <VStack width="70%">
               <CorrectUserList correctUsers={correctUserList}></CorrectUserList>
               <StyledHr />
               <HStack>
@@ -348,16 +349,16 @@ export const Questioner: FC<Props> = (props) => {
                   この問題を終了する
                 </StyledButton>
               </HStack>
-            </StyledPage>
+            </VStack>
           </>
         );
       }
 
       return (
         <>
-          <StyledPage>
+          <Box width="70%">
             <CorrectUserList correctUsers={correctUserList}></CorrectUserList>
-          </StyledPage>
+          </Box>
         </>
       );
 
@@ -365,9 +366,9 @@ export const Questioner: FC<Props> = (props) => {
     case QuestionerState.Wait:
       return (
         <>
-          <StyledPage>
+          <Box width="70%">
             <h5>待機中...</h5>
-          </StyledPage>
+          </Box>
         </>
       );
 

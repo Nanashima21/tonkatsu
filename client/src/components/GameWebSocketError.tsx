@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { StyledButton, StyledPage } from "../Styled";
+import { StyledButton } from "../Styled";
+import { VStack } from "@chakra-ui/react";
 
 export const GameWebSocketError = () => {
   const navigate = useNavigate();
@@ -10,12 +11,12 @@ export const GameWebSocketError = () => {
   // エラー
   return (
     <>
-      <StyledPage>
+      <VStack width="70%">
         <h4>接続に失敗しました</h4>
         <div>
           <StyledButton onClick={backHome}>戻る</StyledButton>
         </div>
-      </StyledPage>
+      </VStack>
     </>
   );
 };

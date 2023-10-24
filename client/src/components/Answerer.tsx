@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { ErrorMessage } from "@hookform/error-message";
 import { GameState, ResultJson } from "../views/Game";
 import {
@@ -11,13 +10,12 @@ import {
 import { useCookies } from "react-cookie";
 import {
   StyledButton,
-  StyledPage,
-  StyledForm,
   StyledErrorMessage,
   StyledInput,
   StyledHr,
 } from "../Styled";
 import "./../index.css";
+import { Box, VStack } from "@chakra-ui/react";
 
 const AnswerState = {
   WaitQuestionerAnswer: 0,
@@ -46,16 +44,6 @@ type Topic = {
   answer: string;
 };
 
-// type ButtonProps = {
-//   isCorrect?: boolean;
-// };
-
-// type answerer = {
-//   user: string;
-//   answer: string;
-//   isCorrect: number;
-// };
-
 export const Answerer: FC<Props> = (props) => {
   const {
     register,
@@ -66,7 +54,6 @@ export const Answerer: FC<Props> = (props) => {
     mode: "onChange",
   });
 
-  const navigate = useNavigate();
   const socketRef = props.socketRef;
   var flag = 0;
   const [status, setStatus] = useState<AnswerState>(
@@ -146,9 +133,9 @@ export const Answerer: FC<Props> = (props) => {
     case AnswerState.WaitQuestionerAnswer:
       return (
         <>
-          <StyledPage>
+          <Box width="70%">
             <h5>待機中...</h5>
-          </StyledPage>
+          </Box>
         </>
       );
 
@@ -156,70 +143,66 @@ export const Answerer: FC<Props> = (props) => {
     case AnswerState.SubmittingAnswer:
       return (
         <>
-          <StyledPage>
-            <StyledForm>
-              <h5 style={{ marginBottom: 16 }}>トピック： {props.topic}</h5>
-              <DescriptionList
-                explanations={props.explanations}
-                isQuestioner={false}
-              ></DescriptionList>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <div style={{ marginTop: 40 }}>
-                  <div>
-                    <h4>よく考えてね。</h4>
-                    <StyledInput
-                      id="answer"
-                      type="text"
-                      {...register("answer", {
-                        required: "解答を入力してください",
-                        maxLength: {
-                          value: 30,
-                          message: "30文字以内で入力してください",
-                        },
-                        pattern: {
-                          value: /^[A-Za-z0-9ぁ-んーァ-ヶーｱ-ﾝﾞﾟ一-龠]+$/i,
-                          message: "入力の形式が不正です",
-                        },
-                      })}
-                    />
-                  </div>
-                  <StyledErrorMessage>
-                    <ErrorMessage
-                      errors={errors}
-                      name="answer"
-                      render={({ message }) => <span>{message}</span>}
-                    />
-                  </StyledErrorMessage>
-                  <StyledButton>送信</StyledButton>
+          <VStack width="70%">
+            <h5 style={{ marginBottom: 16 }}>トピック： {props.topic}</h5>
+            <DescriptionList
+              explanations={props.explanations}
+              isQuestioner={false}
+            ></DescriptionList>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div style={{ marginTop: 40 }}>
+                <div>
+                  <h4>よく考えてね。</h4>
+                  <StyledInput
+                    id="answer"
+                    type="text"
+                    {...register("answer", {
+                      required: "解答を入力してください",
+                      maxLength: {
+                        value: 30,
+                        message: "30文字以内で入力してください",
+                      },
+                      pattern: {
+                        value: /^[A-Za-z0-9ぁ-んーァ-ヶーｱ-ﾝﾞﾟ一-龠]+$/i,
+                        message: "入力の形式が不正です",
+                      },
+                    })}
+                  />
                 </div>
-              </form>
-            </StyledForm>
-          </StyledPage>
+                <StyledErrorMessage>
+                  <ErrorMessage
+                    errors={errors}
+                    name="answer"
+                    render={({ message }) => <span>{message}</span>}
+                  />
+                </StyledErrorMessage>
+                <StyledButton>送信</StyledButton>
+              </div>
+            </form>
+          </VStack>
         </>
       );
 
     case AnswerState.WaitJudge:
       return (
         <>
-          <StyledPage>
-            <StyledForm>
-              <h5 style={{ marginBottom: 16 }}>トピック： {props.topic}</h5>
-              <DescriptionList
-                explanations={props.explanations}
-                isQuestioner={false}
-              ></DescriptionList>
-              <StyledHr style={{ marginTop: 50, marginBottom: 20 }}></StyledHr>
-              <h5>あなたの解答</h5>
-              <h4>{answer}</h4>
-            </StyledForm>
-          </StyledPage>
+          <VStack width="70%">
+            <h5 style={{ marginBottom: 16 }}>トピック： {props.topic}</h5>
+            <DescriptionList
+              explanations={props.explanations}
+              isQuestioner={false}
+            ></DescriptionList>
+            <StyledHr style={{ marginTop: 50, marginBottom: 20 }}></StyledHr>
+            <h5>あなたの解答</h5>
+            <h4>{answer}</h4>
+          </VStack>
         </>
       );
 
     case AnswerState.Result:
       return (
         <>
-          <StyledPage>
+          <VStack width="70%">
             <h5>あなたは...</h5>
             <div>
               {isCorrect ? (
@@ -230,7 +213,7 @@ export const Answerer: FC<Props> = (props) => {
             </div>
             <StyledHr />
             <CorrectUserList correctUsers={correctUserList}></CorrectUserList>
-          </StyledPage>
+          </VStack>
         </>
       );
 
@@ -241,12 +224,11 @@ export const Answerer: FC<Props> = (props) => {
   // エラー
   return (
     <>
-      <StyledPage>
-        <h3>接続に失敗しました</h3>
-        <div>
-          <StyledButton>戻る</StyledButton>
-        </div>
-      </StyledPage>
+      <VStack width="70%">
+        <h4>接続に失敗しました</h4>
+        <StyledButton>戻る</StyledButton>
+        {/* <StyledButton onClick={backHome}>戻る</StyledButton> */}
+      </VStack>
     </>
   );
 };

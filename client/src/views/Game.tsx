@@ -9,6 +9,9 @@ import { Answerer } from "../components/Answerer";
 import { GameWebSocketError } from "../components/GameWebSocketError";
 import { Explanation } from "../components/GameComponents";
 import { useSelector } from "react-redux";
+import { StyledPage, StyledScreen } from "../Styled";
+import { HStack } from "@chakra-ui/react";
+import { GameInfo } from "../components/GameInfo";
 
 export const GameState = {
   Init: 0,
@@ -74,6 +77,7 @@ export const Game = function () {
   const [explanations, setExplanations] = useState<Explanation[]>([]);
 
   const [gameState, setGameState] = useState<GameState>(GameState.Init);
+  const [userNames, setUserNames] = useState<string[]>([]);
   const [result, setResult] = useState<ResultJson>({
     command: "",
     content: {
@@ -123,111 +127,126 @@ export const Game = function () {
     setGameState(GameState.Error);
   };
 
-  switch (gameState) {
-    case GameState.Standby:
-      return (
-        <>
-          <StandbyGame
-            socketRef={socketRef}
-            setGameState={setGameState}
-            moveError={moveError}
-          />
-        </>
-      );
-    case GameState.Questioner:
-      return (
-        <>
-          <Questioner
-            socketRef={socketRef}
-            setGameState={setGameState}
-            moveResult={moveResult}
-            isQuestioner={true}
-            moveError={moveError}
-            explanations={explanations}
-            setExplanations={setExplanations}
-            topic={topic}
-            setTopic={setTopic}
-            question={question}
-            setQuestion={setQuestion}
-          />
-        </>
-      );
-    case GameState.AnsweredAnswerer:
-      return (
-        <>
-          <Questioner
-            socketRef={socketRef}
-            setGameState={setGameState}
-            moveResult={moveResult}
-            isQuestioner={false}
-            moveError={moveError}
-            explanations={explanations}
-            setExplanations={setExplanations}
-            topic={topic}
-            setTopic={setTopic}
-            question={question}
-            setQuestion={setQuestion}
-          />
-        </>
-      );
-    case GameState.Answerer:
-      return (
-        <>
-          <Answerer
-            socketRef={socketRef}
-            setGameState={setGameState}
-            moveResult={moveResult}
-            moveError={moveError}
-            explanations={explanations}
-            setExplanations={setExplanations}
-            topic={topic}
-            setTopic={setTopic}
-            question={question}
-            setQuestion={setQuestion}
-          />
-        </>
-      );
-    case GameState.ResultQuestioner:
-      return (
-        <>
-          <Result
-            socketRef={socketRef}
-            setGameState={setGameState}
-            result={result}
-            setTopic={setTopic}
-            resetTopic={resetTopic}
-            moveAllResult={moveAllResult}
-            isQuestioner={true}
-            moveError={moveError}
-          />
-        </>
-      );
-    case GameState.ResultAnswerer:
-      return (
-        <>
-          <Result
-            socketRef={socketRef}
-            setGameState={setGameState}
-            result={result}
-            setTopic={setTopic}
-            resetTopic={resetTopic}
-            moveAllResult={moveAllResult}
-            isQuestioner={false}
-            moveError={moveError}
-          />
-        </>
-      );
-    case GameState.AllResult:
-      return (
-        <>
-          <AllResult setGameState={setGameState} result={allResult} />
-        </>
-      );
-    default:
-      return (
-        <>
-          <GameWebSocketError />
-        </>
-      );
-  }
+  const gamePage = (gameState: GameState) => {
+    switch (gameState) {
+      case GameState.Standby:
+        return (
+          <>
+            <StandbyGame
+              setUserNames={setUserNames}
+              socketRef={socketRef}
+              setGameState={setGameState}
+              moveError={moveError}
+            />
+          </>
+        );
+      case GameState.Questioner:
+        return (
+          <>
+            <Questioner
+              socketRef={socketRef}
+              setGameState={setGameState}
+              moveResult={moveResult}
+              isQuestioner={true}
+              moveError={moveError}
+              explanations={explanations}
+              setExplanations={setExplanations}
+              topic={topic}
+              setTopic={setTopic}
+              question={question}
+              setQuestion={setQuestion}
+            />
+          </>
+        );
+      case GameState.AnsweredAnswerer:
+        return (
+          <>
+            <Questioner
+              socketRef={socketRef}
+              setGameState={setGameState}
+              moveResult={moveResult}
+              isQuestioner={false}
+              moveError={moveError}
+              explanations={explanations}
+              setExplanations={setExplanations}
+              topic={topic}
+              setTopic={setTopic}
+              question={question}
+              setQuestion={setQuestion}
+            />
+          </>
+        );
+      case GameState.Answerer:
+        return (
+          <>
+            <Answerer
+              socketRef={socketRef}
+              setGameState={setGameState}
+              moveResult={moveResult}
+              moveError={moveError}
+              explanations={explanations}
+              setExplanations={setExplanations}
+              topic={topic}
+              setTopic={setTopic}
+              question={question}
+              setQuestion={setQuestion}
+            />
+          </>
+        );
+      case GameState.ResultQuestioner:
+        return (
+          <>
+            <Result
+              socketRef={socketRef}
+              setGameState={setGameState}
+              result={result}
+              setTopic={setTopic}
+              resetTopic={resetTopic}
+              moveAllResult={moveAllResult}
+              isQuestioner={true}
+              moveError={moveError}
+            />
+          </>
+        );
+      case GameState.ResultAnswerer:
+        return (
+          <>
+            <Result
+              socketRef={socketRef}
+              setGameState={setGameState}
+              result={result}
+              setTopic={setTopic}
+              resetTopic={resetTopic}
+              moveAllResult={moveAllResult}
+              isQuestioner={false}
+              moveError={moveError}
+            />
+          </>
+        );
+      case GameState.AllResult:
+        return (
+          <>
+            <AllResult setGameState={setGameState} result={allResult} />
+          </>
+        );
+      default:
+        return (
+          <>
+            <GameWebSocketError />
+          </>
+        );
+    }
+  };
+  return (
+    <>
+      <StyledPage>
+        <StyledScreen>
+          <HStack width="100%" height="100%">
+            <GameInfo state={gameState} userNames={userNames} />
+            {gamePage(gameState)}
+          </HStack>
+        </StyledScreen>
+      </StyledPage>
+    </>
+  );
 };

@@ -69,6 +69,10 @@ export const StyledRadioButtonGroup = styled.div`
     background-color: #1ba0ff;
     color: #fff;
   }
+  .radio-button:disabled + label {
+    background-color: #999;
+    color: #fff;
+  }
 `;
 
 export const StyledHr = styled.hr`

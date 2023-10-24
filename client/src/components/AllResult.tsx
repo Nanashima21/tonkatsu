@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, HStack, VStack } from "@chakra-ui/react";
 import { GameState, AllResultJson } from "../views/Game";
-import { StyledButton, StyledPage, StyledScreen, StyledHr } from "../Styled";
+import { StyledButton, StyledHr } from "../Styled";
 import snareRoll from "../assets/snare_roll.mp3";
 
 type Props = {
@@ -74,17 +74,16 @@ export const AllResult: FC<Props> = (props) => {
 
   return (
     <>
-      <StyledPage>
-        <StyledScreen>
-          <VStack>
-            <h2>最終順位</h2>
-          </VStack>
-          <VStack alignItems="center" py="20px" px="150px" spacing="20px">
-            {gameResults.map((gameResult, i) => (
-              <div style={styles.appeal}>
-                {Appeal}
-                <style>
-                  {`@keyframes toLeft {
+      <VStack width="70%">
+        <VStack>
+          <h2>最終順位</h2>
+        </VStack>
+        <VStack alignItems="center" py="20px" px="150px" spacing="20px">
+          {gameResults.map((gameResult, i) => (
+            <div style={styles.appeal}>
+              {Appeal}
+              <style>
+                {`@keyframes toLeft {
                     0% {
                       opacity: 0;
                       transform: translateX(900%);
@@ -101,33 +100,32 @@ export const AllResult: FC<Props> = (props) => {
                       transform: translateX(900%);
                     }
                   }`}
-                </style>
+              </style>
 
-                <HStack
-                  key={i}
-                  style={{
-                    opacity: `0`,
-                    animation: `toLeft 1s ${
-                      3.5 - 0.7 * (gameResult.rank as number)
-                    }s forwards ${
-                      (gameResult.rank as number) === 1
-                        ? ", rainbow 0.5s infinite"
-                        : ""
-                    }`,
-                    fontSize: `${0.6 * (5 - (gameResult.rank as number))}em`,
-                  }}
-                >
-                  <Box width="100px">{gameResult.rank}位</Box>
-                  <Box width="300px">{gameResult.userName}</Box>
-                  <Box width="200px">{gameResult.score}pt</Box>
-                </HStack>
-              </div>
-            ))}
-          </VStack>
-          <StyledHr />
-          <StyledButton onClick={backHome}>終了</StyledButton>
-        </StyledScreen>
-      </StyledPage>
+              <HStack
+                key={i}
+                style={{
+                  opacity: `0`,
+                  animation: `toLeft 1s ${
+                    3.5 - 0.7 * (gameResult.rank as number)
+                  }s forwards ${
+                    (gameResult.rank as number) === 1
+                      ? ", rainbow 0.5s infinite"
+                      : ""
+                  }`,
+                  fontSize: `${0.6 * (5 - (gameResult.rank as number))}em`,
+                }}
+              >
+                <Box width="100px">{gameResult.rank}位</Box>
+                <Box width="300px">{gameResult.userName}</Box>
+                <Box width="200px">{gameResult.score}pt</Box>
+              </HStack>
+            </div>
+          ))}
+        </VStack>
+        <StyledHr />
+        <StyledButton onClick={backHome}>終了</StyledButton>
+      </VStack>
     </>
   );
 };
