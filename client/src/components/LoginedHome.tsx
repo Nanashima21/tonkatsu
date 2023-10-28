@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useCookies } from "react-cookie";
@@ -23,7 +23,7 @@ export const LoginedHome = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = useState<string>("");
-  const [cookies, setCookie, removeCookie] = useCookies(["userID"]);
+  const [cookies, , removeCookie] = useCookies(["userID"]);
 
   const {
     handleSubmit,

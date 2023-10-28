@@ -25,7 +25,7 @@ export const LoginForm: FC<Props> = (props) => {
   const navigate = useNavigate();
 
   const [errorMsg, setErrorMsg] = useState<string>("");
-  const [cookies, setCookie] = useCookies(["userID"]);
+  const [, setCookie] = useCookies(["userID"]);
 
   const {
     register,
