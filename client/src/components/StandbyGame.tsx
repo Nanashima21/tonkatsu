@@ -28,8 +28,8 @@ export const StandbyGame: FC<Props> = (props) => {
   // var userNum = 2;
   const navigate = useNavigate();
   var flag = 0;
-  const [gameMode, setGameMode] = useState("normal");
-  const [langMode, setLangMode] = useState("japanese");
+  const [difficulty, setdifficulty] = useState("normal");
+  const [language, setlanguage] = useState("japanese");
 
   // status:
   // 0: WebSocket 接続前
@@ -89,7 +89,7 @@ export const StandbyGame: FC<Props> = (props) => {
 
   const startGame = function () {
     // ゲームを開始するとき
-    var sendJson = { command: "start_game", content: { game_mode: gameMode } };
+    var sendJson = { command: "start_game", content: { game_mode: difficulty + "," + language } };
     socketRef.current?.send(JSON.stringify(sendJson));
   };
 
@@ -160,9 +160,9 @@ export const StandbyGame: FC<Props> = (props) => {
                     id="easy"
                     className="radio-button"
                     disabled={!isOwner}
-                    checked={gameMode === "easy"}
+                    checked={difficulty === "easy"}
                     onChange={() => {
-                      setGameMode("easy");
+                      setdifficulty("easy");
                     }}
                   />
                   <label htmlFor="easy">かんたん</label>
@@ -174,9 +174,9 @@ export const StandbyGame: FC<Props> = (props) => {
                     id="normal"
                     className="radio-button"
                     disabled={!isOwner}
-                    checked={gameMode === "normal"}
+                    checked={difficulty === "normal"}
                     onChange={() => {
-                      setGameMode("normal");
+                      setdifficulty("normal");
                     }}
                   />
                   <label htmlFor="normal">ふつう</label>
@@ -188,9 +188,9 @@ export const StandbyGame: FC<Props> = (props) => {
                     id="hard"
                     className="radio-button"
                     disabled={!isOwner}
-                    checked={gameMode === "hard"}
+                    checked={difficulty === "hard"}
                     onChange={() => {
-                      setGameMode("hard");
+                      setdifficulty("hard");
                     }}
                   />
                   <label htmlFor="hard">むずかしい</label>
@@ -208,9 +208,9 @@ export const StandbyGame: FC<Props> = (props) => {
                     id="japanese"
                     className="radio-button"
                     disabled={!isOwner}
-                    checked={langMode === "japanese"}
+                    checked={language === "japanese"}
                     onChange={() => {
-                      setLangMode("japanese");
+                      setlanguage("japanese");
                     }}
                   />
                   <label htmlFor="japanese">日本語</label>
@@ -222,9 +222,9 @@ export const StandbyGame: FC<Props> = (props) => {
                     id="english"
                     className="radio-button"
                     disabled={!isOwner}
-                    checked={langMode === "english"}
+                    checked={language === "english"}
                     onChange={() => {
-                      setLangMode("english");
+                      setlanguage("english");
                     }}
                   />
                   <label htmlFor="english">English</label>
@@ -236,9 +236,9 @@ export const StandbyGame: FC<Props> = (props) => {
                     id="chinese"
                     className="radio-button"
                     disabled={!isOwner}
-                    checked={langMode === "chinese"}
+                    checked={language === "chinese"}
                     onChange={() => {
-                      setLangMode("chinese");
+                      setlanguage("chinese");
                     }}
                   />
                   <label htmlFor="chinese">中文体</label>
