@@ -15,7 +15,7 @@ export const NotLoginedHome = () => {
 
   return (
     <>
-      <Box minWidth="450px" maxWidth="900px" height="fit-content" width="50%" marginX="auto">
+      <Box minWidth="450px" maxWidth="900px" height="100%" width="50%" marginX="auto">
         <StyledForm>
           <StyledLogo src="/src/assets/logo.png"></StyledLogo>
           <Box fontFamily="arial black" p="10px">
