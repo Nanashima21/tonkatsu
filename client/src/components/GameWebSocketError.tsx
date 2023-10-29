@@ -11,11 +11,9 @@ export const GameWebSocketError = () => {
   // エラー
   return (
     <>
-      <VStack width="70%">
+      <VStack>
         <h4>接続に失敗しました</h4>
-        <div>
-          <StyledButton onClick={backHome}>戻る</StyledButton>
-        </div>
+        <StyledButton onClick={backHome}>戻る</StyledButton>
       </VStack>
     </>
   );

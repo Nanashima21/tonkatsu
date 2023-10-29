@@ -74,7 +74,7 @@ export const AllResult: FC<Props> = (props) => {
 
   return (
     <>
-      <VStack width="70%">
+      <VStack>
         <VStack>
           <h2>最終順位</h2>
         </VStack>

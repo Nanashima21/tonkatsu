@@ -25,7 +25,7 @@ export const GameInfo: FC<Props> = (props) => {
 
   return (
     <>
-      <VStack width="30%" height="100%">
+      <VStack width="30%" height="100%" overflowY="scroll">
         {props.state === GameState.Standby ? (
           <h3>部屋 ID : {roomid}</h3>
         ) : (

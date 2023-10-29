@@ -13,6 +13,7 @@ import {
   StyledErrorMessage,
   StyledInput,
   StyledHr,
+  Styledform,
 } from "../Styled";
 import "./../index.css";
 import { Box, VStack } from "@chakra-ui/react";
@@ -60,7 +61,7 @@ export const Answerer: FC<Props> = (props) => {
     AnswerState.WaitQuestionerAnswer
   );
   const [answer, setAnswer] = useState("");
-  const [userid, setUserid, removeUserid] = useCookies(["userID"]);
+  const [userid] = useCookies(["userID"]);
   const [correctUserList, setCorrectUserList] = useState<string[]>([]);
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
   // WebSocket
@@ -133,7 +134,7 @@ export const Answerer: FC<Props> = (props) => {
     case AnswerState.WaitQuestionerAnswer:
       return (
         <>
-          <Box width="70%">
+          <Box>
             <h5>待機中...</h5>
           </Box>
         </>
@@ -143,42 +144,39 @@ export const Answerer: FC<Props> = (props) => {
     case AnswerState.SubmittingAnswer:
       return (
         <>
-          <VStack width="70%">
+          <VStack overflow="scroll">
             <h5 style={{ marginBottom: 16 }}>トピック： {props.topic}</h5>
             <DescriptionList
               explanations={props.explanations}
               isQuestioner={false}
             ></DescriptionList>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div style={{ marginTop: 40 }}>
-                <div>
-                  <h4>よく考えてね。</h4>
-                  <StyledInput
-                    id="answer"
-                    type="text"
-                    {...register("answer", {
-                      required: "解答を入力してください",
-                      maxLength: {
-                        value: 30,
-                        message: "30文字以内で入力してください",
-                      },
-                      pattern: {
-                        value: /^[A-Za-z0-9ぁ-んーァ-ヶーｱ-ﾝﾞﾟ一-龠]+$/i,
-                        message: "入力の形式が不正です",
-                      },
-                    })}
-                  />
-                </div>
-                <StyledErrorMessage>
-                  <ErrorMessage
-                    errors={errors}
-                    name="answer"
-                    render={({ message }) => <span>{message}</span>}
-                  />
-                </StyledErrorMessage>
-                <StyledButton>送信</StyledButton>
-              </div>
-            </form>
+
+            <Styledform onSubmit={handleSubmit(onSubmit)}>
+              <StyledInput
+                id="answer"
+                type="text"
+                {...register("answer", {
+                  required: "解答を入力してください",
+                  maxLength: {
+                    value: 30,
+                    message: "30文字以内で入力してください",
+                  },
+                  pattern: {
+                    value: /^[A-Za-z0-9ぁ-んーァ-ヶーｱ-ﾝﾞﾟ一-龠]+$/i,
+                    message: "入力の形式が不正です",
+                  },
+                })}
+              />
+
+              <StyledErrorMessage>
+                <ErrorMessage
+                  errors={errors}
+                  name="answer"
+                  render={({ message }) => <span>{message}</span>}
+                />
+              </StyledErrorMessage>
+              <StyledButton>送信</StyledButton>
+            </Styledform>
           </VStack>
         </>
       );
@@ -186,7 +184,7 @@ export const Answerer: FC<Props> = (props) => {
     case AnswerState.WaitJudge:
       return (
         <>
-          <VStack width="70%">
+          <VStack>
             <h5 style={{ marginBottom: 16 }}>トピック： {props.topic}</h5>
             <DescriptionList
               explanations={props.explanations}
@@ -202,15 +200,21 @@ export const Answerer: FC<Props> = (props) => {
     case AnswerState.Result:
       return (
         <>
-          <VStack width="70%">
-            <h5>あなたは...</h5>
-            <div>
+          <VStack>
+            <h5>
+              あなたは...
               {isCorrect ? (
-                <h2 className="big_raibow">正解</h2>
+                <>
+                  <h2 className="big_raibow">正解</h2>
+                  <>でした！</>
+                </>
               ) : (
-                <h2 className="sad_black">不正解</h2>
+                <>
+                  <h2 className="sad_black">不正解</h2>
+                  <>でした...</>
+                </>
               )}
-            </div>
+            </h5>
             <StyledHr />
             <CorrectUserList correctUsers={correctUserList}></CorrectUserList>
           </VStack>
@@ -224,7 +228,7 @@ export const Answerer: FC<Props> = (props) => {
   // エラー
   return (
     <>
-      <VStack width="70%">
+      <VStack>
         <h4>接続に失敗しました</h4>
         <StyledButton>戻る</StyledButton>
         {/* <StyledButton onClick={backHome}>戻る</StyledButton> */}

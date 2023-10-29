@@ -121,7 +121,7 @@ export const StandbyGame: FC<Props> = (props) => {
   if (status == 0) {
     return (
       <>
-        <Box width="70%">
+        <Box>
           {isOwner ? <h4>部屋を作成中...</h4> : <h4>部屋を検索中...</h4>}
         </Box>
       </>
@@ -132,7 +132,7 @@ export const StandbyGame: FC<Props> = (props) => {
   if (status == 1) {
     return (
       <>
-        <VStack width="70%">
+        <VStack>
           <h4>部屋が見つかりませんでした</h4>
           <StyledButton onClick={backHome}>戻る</StyledButton>
         </VStack>
@@ -142,121 +142,125 @@ export const StandbyGame: FC<Props> = (props) => {
 
   return (
     <>
-      <VStack width="70%" height="100%">
-        {isOwner ? (
-          <h4>難易度と言語を選択してください</h4>
-        ) : (
-          <h4>ホストの選択を待機しています</h4>
-        )}
-        <HStack width="100%" height="60%" gap="5%" marginLeft="15%">
-          <VStack width="35%">
-            <h4>難易度</h4>
-            <StyledRadioButtonGroup>
-              <div className="item">
-                <input
-                  type="radio"
-                  value="easy"
-                  id="easy"
-                  className="radio-button"
-                  disabled={!isOwner}
-                  checked={gameMode === "easy"}
-                  onChange={() => {
-                    setGameMode("easy");
-                  }}
-                />
-                <label htmlFor="easy">かんたん</label>
-              </div>
-              <div className="item">
-                <input
-                  type="radio"
-                  value="normal"
-                  id="normal"
-                  className="radio-button"
-                  disabled={!isOwner}
-                  checked={gameMode === "normal"}
-                  onChange={() => {
-                    setGameMode("normal");
-                  }}
-                />
-                <label htmlFor="normal">ふつう</label>
-              </div>
-              <div className="item">
-                <input
-                  type="radio"
-                  value="hard"
-                  id="hard"
-                  className="radio-button"
-                  disabled={!isOwner}
-                  checked={gameMode === "hard"}
-                  onChange={() => {
-                    setGameMode("hard");
-                  }}
-                />
-                <label htmlFor="hard">むずかしい</label>
-              </div>
-            </StyledRadioButtonGroup>
-          </VStack>
-          <StyledVr />
-          <VStack width="35%">
-            <h4>言語</h4>
-            <StyledRadioButtonGroup>
-              <div className="item">
-                <input
-                  type="radio"
-                  value="japanese"
-                  id="japanese"
-                  className="radio-button"
-                  disabled={!isOwner}
-                  checked={langMode === "japanese"}
-                  onChange={() => {
-                    setLangMode("japanese");
-                  }}
-                />
-                <label htmlFor="japanese">日本語</label>
-              </div>
-              <div className="item">
-                <input
-                  type="radio"
-                  value="english"
-                  id="english"
-                  className="radio-button"
-                  disabled={!isOwner}
-                  checked={langMode === "english"}
-                  onChange={() => {
-                    setLangMode("english");
-                  }}
-                />
-                <label htmlFor="english">English</label>
-              </div>
-              <div className="item">
-                <input
-                  type="radio"
-                  value="chinese"
-                  id="chinese"
-                  className="radio-button"
-                  disabled={!isOwner}
-                  checked={langMode === "chinese"}
-                  onChange={() => {
-                    setLangMode("chinese");
-                  }}
-                />
-                <label htmlFor="chinese">中文体</label>
-              </div>
-            </StyledRadioButtonGroup>
-          </VStack>
-        </HStack>
-        <StyledHr />
-        <HStack width="80%" height="20%" gap="10%" marginRight="5%">
-          <StyledButton onClick={startGame} disabled={!isOwner}>
-            ゲームを始める
-          </StyledButton>
+      <Box height="100%" overflowY="scroll">
+        <VStack width="100%" height="100%" justifyContent="space-between">
           {isOwner ? (
-            <StyledButton onClick={cancelGame}>ゲームをキャンセル</StyledButton>
+            <h4>難易度と言語を選択してください</h4>
           ) : (
-            <StyledButton onClick={exitRoom}>部屋を抜ける</StyledButton>
+            <h4>ホストの選択を待機しています</h4>
           )}
-        </HStack>
-      </VStack>
+          <HStack width="100%" gap="5%" marginLeft="15%">
+            <VStack width="35%">
+              <h4>難易度</h4>
+              <StyledRadioButtonGroup>
+                <div className="item">
+                  <input
+                    type="radio"
+                    value="easy"
+                    id="easy"
+                    className="radio-button"
+                    disabled={!isOwner}
+                    checked={gameMode === "easy"}
+                    onChange={() => {
+                      setGameMode("easy");
+                    }}
+                  />
+                  <label htmlFor="easy">かんたん</label>
+                </div>
+                <div className="item">
+                  <input
+                    type="radio"
+                    value="normal"
+                    id="normal"
+                    className="radio-button"
+                    disabled={!isOwner}
+                    checked={gameMode === "normal"}
+                    onChange={() => {
+                      setGameMode("normal");
+                    }}
+                  />
+                  <label htmlFor="normal">ふつう</label>
+                </div>
+                <div className="item">
+                  <input
+                    type="radio"
+                    value="hard"
+                    id="hard"
+                    className="radio-button"
+                    disabled={!isOwner}
+                    checked={gameMode === "hard"}
+                    onChange={() => {
+                      setGameMode("hard");
+                    }}
+                  />
+                  <label htmlFor="hard">むずかしい</label>
+                </div>
+              </StyledRadioButtonGroup>
+            </VStack>
+            <StyledVr />
+            <VStack width="35%">
+              <h4>言語</h4>
+              <StyledRadioButtonGroup>
+                <div className="item">
+                  <input
+                    type="radio"
+                    value="japanese"
+                    id="japanese"
+                    className="radio-button"
+                    disabled={!isOwner}
+                    checked={langMode === "japanese"}
+                    onChange={() => {
+                      setLangMode("japanese");
+                    }}
+                  />
+                  <label htmlFor="japanese">日本語</label>
+                </div>
+                <div className="item">
+                  <input
+                    type="radio"
+                    value="english"
+                    id="english"
+                    className="radio-button"
+                    disabled={!isOwner}
+                    checked={langMode === "english"}
+                    onChange={() => {
+                      setLangMode("english");
+                    }}
+                  />
+                  <label htmlFor="english">English</label>
+                </div>
+                <div className="item">
+                  <input
+                    type="radio"
+                    value="chinese"
+                    id="chinese"
+                    className="radio-button"
+                    disabled={!isOwner}
+                    checked={langMode === "chinese"}
+                    onChange={() => {
+                      setLangMode("chinese");
+                    }}
+                  />
+                  <label htmlFor="chinese">中文体</label>
+                </div>
+              </StyledRadioButtonGroup>
+            </VStack>
+          </HStack>
+          <StyledHr />
+          <HStack width="80%" gap="10%" marginRight="5%" paddingBottom="5%">
+            <StyledButton onClick={startGame} disabled={!isOwner}>
+              ゲームを始める
+            </StyledButton>
+            {isOwner ? (
+              <StyledButton onClick={cancelGame}>
+                ゲームをキャンセル
+              </StyledButton>
+            ) : (
+              <StyledButton onClick={exitRoom}>部屋を抜ける</StyledButton>
+            )}
+          </HStack>
+        </VStack>
+      </Box>
     </>
   );
 };

@@ -123,7 +123,7 @@ export const Result: FC<Props> = (props) => {
 
   return (
     <>
-      <VStack width="70%">
+      <VStack>
         <VStack>
           <h3>順位</h3>
           <h4>

@@ -9,8 +9,8 @@ import { Answerer } from "../components/Answerer";
 import { GameWebSocketError } from "../components/GameWebSocketError";
 import { Explanation } from "../components/GameComponents";
 import { useSelector } from "react-redux";
-import { StyledPage, StyledScreen } from "../Styled";
-import { HStack } from "@chakra-ui/react";
+import { StyledScreen } from "../Styled";
+import { Box, HStack, VStack } from "@chakra-ui/react";
 import { GameInfo } from "../components/GameInfo";
 
 export const GameState = {
@@ -143,54 +143,63 @@ export const Game = function () {
       case GameState.Questioner:
         return (
           <>
-            <Questioner
-              socketRef={socketRef}
-              setGameState={setGameState}
-              moveResult={moveResult}
-              isQuestioner={true}
-              moveError={moveError}
-              explanations={explanations}
-              setExplanations={setExplanations}
-              topic={topic}
-              setTopic={setTopic}
-              question={question}
-              setQuestion={setQuestion}
-            />
+            <VStack>
+              <h3>あなたは出題者です</h3>
+              <Questioner
+                socketRef={socketRef}
+                setGameState={setGameState}
+                moveResult={moveResult}
+                isQuestioner={true}
+                moveError={moveError}
+                explanations={explanations}
+                setExplanations={setExplanations}
+                topic={topic}
+                setTopic={setTopic}
+                question={question}
+                setQuestion={setQuestion}
+              />
+            </VStack>
           </>
         );
       case GameState.AnsweredAnswerer:
         return (
           <>
-            <Questioner
-              socketRef={socketRef}
-              setGameState={setGameState}
-              moveResult={moveResult}
-              isQuestioner={false}
-              moveError={moveError}
-              explanations={explanations}
-              setExplanations={setExplanations}
-              topic={topic}
-              setTopic={setTopic}
-              question={question}
-              setQuestion={setQuestion}
-            />
+            <VStack>
+              <h4>あなたは正解済み回答者です</h4>
+              <Questioner
+                socketRef={socketRef}
+                setGameState={setGameState}
+                moveResult={moveResult}
+                isQuestioner={false}
+                moveError={moveError}
+                explanations={explanations}
+                setExplanations={setExplanations}
+                topic={topic}
+                setTopic={setTopic}
+                question={question}
+                setQuestion={setQuestion}
+              />
+            </VStack>
           </>
         );
       case GameState.Answerer:
         return (
           <>
-            <Answerer
-              socketRef={socketRef}
-              setGameState={setGameState}
-              moveResult={moveResult}
-              moveError={moveError}
-              explanations={explanations}
-              setExplanations={setExplanations}
-              topic={topic}
-              setTopic={setTopic}
-              question={question}
-              setQuestion={setQuestion}
-            />
+            <VStack>
+              <h3>あなたは回答者です</h3>
+              <Answerer
+                socketRef={socketRef}
+                setGameState={setGameState}
+                moveResult={moveResult}
+                moveError={moveError}
+                explanations={explanations}
+                setExplanations={setExplanations}
+                topic={topic}
+                setTopic={setTopic}
+                question={question}
+                setQuestion={setQuestion}
+              />
+            </VStack>
           </>
         );
       case GameState.ResultQuestioner:
@@ -239,14 +248,14 @@ export const Game = function () {
   };
   return (
     <>
-      <StyledPage>
-        <StyledScreen>
-          <HStack width="100%" height="100%">
-            <GameInfo state={gameState} userNames={userNames} />
+      <StyledScreen>
+        <HStack width="100%" height="100%">
+          <GameInfo state={gameState} userNames={userNames} />
+          <Box width="70%" height="100%" overflow="scroll">
             {gamePage(gameState)}
-          </HStack>
-        </StyledScreen>
-      </StyledPage>
+          </Box>
+        </HStack>
+      </StyledScreen>
     </>
   );
 };

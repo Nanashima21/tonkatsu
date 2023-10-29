@@ -14,12 +14,11 @@ import { Answerer } from "./Answerer";
 import {
   StyledButton,
   StyledHr,
-  StyledPage,
-  StyledScreen,
   StyledAnswer,
   StyledErrorMessage,
-  StyledForm,
+  Styledform,
   StyledInput,
+  StyledUser,
 } from "../Styled";
 
 type Props = {
@@ -206,37 +205,35 @@ export const Questioner: FC<Props> = (props) => {
       if (props.isQuestioner) {
         return (
           <>
-            <VStack width="70%">
+            <VStack width="100%">
+              <h4>以下の質問に答えてください</h4>
               <h5>質問：{props.topic}</h5>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <div>
-                  <div>
-                    <StyledInput
-                      id="question"
-                      type="text"
-                      {...register("question", {
-                        required: "解答を入力してください",
-                        maxLength: {
-                          value: 30,
-                          message: "30文字以内で入力してください",
-                        },
-                        pattern: {
-                          value: /^[A-Za-z0-9ぁ-んーァ-ヶーｱ-ﾝﾞﾟ一-龠]+$/i,
-                          message: "入力の形式が不正です",
-                        },
-                      })}
-                    />
-                  </div>
-                  <StyledErrorMessage>
-                    <ErrorMessage
-                      errors={errors}
-                      name="question"
-                      render={({ message }) => <span>{message}</span>}
-                    />
-                  </StyledErrorMessage>
-                  <StyledButton type="submit">送信</StyledButton>
-                </div>
-              </form>
+
+              <Styledform onSubmit={handleSubmit(onSubmit)}>
+                <StyledInput
+                  id="question"
+                  type="text"
+                  {...register("question", {
+                    required: "解答を入力してください",
+                    maxLength: {
+                      value: 30,
+                      message: "30文字以内で入力してください",
+                    },
+                    pattern: {
+                      value: /^[A-Za-z0-9ぁ-んーァ-ヶーｱ-ﾝﾞﾟ一-龠]+$/i,
+                      message: "入力の形式が不正です",
+                    },
+                  })}
+                />
+                <StyledErrorMessage>
+                  <ErrorMessage
+                    errors={errors}
+                    name="question"
+                    render={({ message }) => <span>{message}</span>}
+                  />
+                </StyledErrorMessage>
+                <StyledButton type="submit">送信</StyledButton>
+              </Styledform>
             </VStack>
           </>
         );
@@ -244,7 +241,7 @@ export const Questioner: FC<Props> = (props) => {
 
       return (
         <>
-          <Box width="70%">
+          <Box>
             <h3>待機中...</h3>
           </Box>
         </>
@@ -253,7 +250,7 @@ export const Questioner: FC<Props> = (props) => {
     case QuestionerState.JudgingAnswer:
       return (
         <>
-          <VStack width="70%">
+          <VStack>
             <VStack>
               <h5>質問：{props.topic}</h5>
               <h5 style={{ marginBottom: 20 }}>
@@ -265,16 +262,18 @@ export const Questioner: FC<Props> = (props) => {
                 isQuestioner={true}
               ></DescriptionList>
             </VStack>
-            <VStack alignItems="left" p="20px" spacing="30px">
+            <VStack
+              width="100%"
+              alignItems="left"
+              marginLeft="10%"
+              p="20px"
+              spacing="30px"
+            >
               {answerers.map((answerer, i) => (
                 <HStack key={i}>
                   <VStack spacing={0}>
-                    <img
-                      src="/src/assets/icon-user.png"
-                      width="40"
-                      style={{ paddingTop: 12 }}
-                    ></img>
-                    <p>{answerer.user}</p>
+                    <img src="/src/assets/icon-user.png" width="35px" />
+                    <StyledUser>{answerer.user}</StyledUser>
                   </VStack>
                   {props.isQuestioner ? (
                     // 出題者
@@ -289,26 +288,24 @@ export const Questioner: FC<Props> = (props) => {
                         </>
                       ) : (
                         <>
-                          <StyledAnswer style={{ marginRight: 20 }}>
-                            <h5>{answerer.answer}</h5>
-                          </StyledAnswer>
+                          <StyledAnswer>{answerer.answer}</StyledAnswer>
                           <StyledQuizButton
                             onClick={() => judge(true, answerer)}
-                            style={{ marginRight: 5, marginTop: 15 }}
+                            // style={{ marginRight: 5, marginTop: 15 }}
                           >
                             <img
-                              width="10px"
-                              height="10px"
+                              width="50px"
+                              height="50px"
                               src="/src/assets/icon-maru.png"
                             ></img>
                           </StyledQuizButton>
                           <StyledQuizButton
                             onClick={() => judge(false, answerer)}
-                            style={{ marginTop: 15 }}
+                            // style={{ marginTop: 15 }}
                           >
                             <img
-                              width="10px"
-                              height="10px"
+                              width="50px"
+                              height="50px"
                               src="/src/assets/icon-batsu.png"
                             ></img>
                           </StyledQuizButton>
@@ -334,17 +331,16 @@ export const Questioner: FC<Props> = (props) => {
       if (props.isQuestioner) {
         return (
           <>
-            <VStack width="70%">
+            <VStack width="100%">
               <CorrectUserList correctUsers={correctUserList}></CorrectUserList>
               <StyledHr />
-              <HStack>
-                {props.explanations.length < 5 && answererNum > 0 ? (
-                  <StyledButton onClick={next_explanation}>
-                    次の説明に移る
-                  </StyledButton>
-                ) : (
-                  <></>
-                )}
+              <HStack width="70%">
+                <StyledButton
+                  onClick={next_explanation}
+                  disabled={props.explanations.length >= 5 || answererNum === 0}
+                >
+                  次の説明に移る
+                </StyledButton>
                 <StyledButton onClick={question_done}>
                   この問題を終了する
                 </StyledButton>

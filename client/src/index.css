@@ -122,12 +122,12 @@ li {
 }
 
 .big_raibow {
-  font-size: 15em;
+  /* font-size: 15em; */
   animation: rainbow 0.5s infinite, zoom 0.5s;
   font-style: oblique;
 }
 .sad_black {
-  font-size: 10em;
+  /* font-size: 10em; */
   animation: poyoyon3 1.5s infinite;
 }
 @media (prefers-color-scheme: light) {
