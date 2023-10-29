@@ -7,13 +7,13 @@ import { useDispatch } from "react-redux";
 import { becomeOwner, createRoom } from "../app/user/userSlice";
 import {
   StyledButton,
-  StyledPage,
   StyledForm,
   StyledErrorMessage,
   StyledInput,
   StyledHr,
   StyledLogo,
 } from "../Styled";
+import { Box } from "@chakra-ui/react";
 
 type RoomId = {
   id: string;
@@ -86,12 +86,9 @@ export const LoginedHome = () => {
 
   return (
     <>
-      <StyledPage>
+      <Box minWidth="450px" maxWidth="900px" height="100%" width="50%" marginX="auto">
         <StyledForm>
-          <StyledLogo
-            style={{ width: 300 }}
-            src="/src/assets/logo.png"
-          ></StyledLogo>
+          <StyledLogo src="/src/assets/logo.png"></StyledLogo>
           <h5>userID : {cookies.userID}</h5>
           <form onSubmit={handleSubmit(joinButton)}>
             <div>
@@ -129,7 +126,7 @@ export const LoginedHome = () => {
             <StyledButton onClick={logout}>ログアウト</StyledButton>
           </div>
         </StyledForm>
-      </StyledPage>
+      </Box>
     </>
   );
 };

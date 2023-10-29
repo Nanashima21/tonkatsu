@@ -11,7 +11,7 @@ export const StyledNavbar = styled.nav`
     color: #fff;
     padding: 10px 20px 10px 10px;
     display: block;
-    font-size: large;
+    font-size: x-large;
     font-weight: 800;
   }
 `;
@@ -125,7 +125,6 @@ export const StyledButton = styled.button`
 export const StyledScreen = styled.div`
   border-radius: 30px;
   position: relative;
-  z-index: 1;
   background: #ffffff;
   width: 85%;
   height: 90%;
@@ -137,7 +136,6 @@ export const StyledScreen = styled.div`
 export const StyledUsers = styled.div`
   border-radius: 30px;
   position: relative;
-  z-index: 1;
   background: #d9d9d9;
   width: 85%;
   height: 90%;
@@ -151,24 +149,27 @@ export const StyledIcon = styled.img`
 `;
 
 export const StyledForm = styled.div`
+  overflow: scroll;
   border-radius: 30px;
   position: relative;
-  z-index: 1;
   background: #ffffff;
-  width: 85%;
+  width: 100%;
   height: 90%;
-  margin-left: 7.5%;
+  padding: 10px;
   text-align: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 `;
 
+export const Styledform = styled.form`
+  width: 100%;
+`;
+
 export const StyledInput = styled.input`
-  border-radius: 100px;
+  border-radius: 10px;
   border: 1px solid #535bf2;
-  padding: 8px 16px;
-  margin: 10px;
-  width: 80%;
-  height: 40px;
+  padding: 16px 16px;
+  margin-bottom: 10px;
+  width: 50%;
   font-size: 1em;
 `;
 
@@ -180,14 +181,15 @@ export const StyledErrorMessage = styled.div`
 export const StyledAnswer = styled.div`
   width: 60%;
   display: inline-block;
-  position: relative; 
+  position: relative;
   margin: 5px 0 0 16px;
   padding: 17px 13px;
   border-radius: 100px;
   background: #eeeeee;
   &:p {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
+  }
 `;
 
 export const StyledMessage = styled.p`
@@ -213,5 +215,19 @@ export const StyledUserListElem = styled.div`
 
 export const StyledLogo = styled.img`
   margin: 0 auto 20px;
-  width: 300px;
+  width: 60%;
+`;
+
+export const StyledModal = styled.div`
+  overflow: scroll;
+  border-radius: 30px;
+  position: relative;
+  background: #ffffff;
+  width: 85%;
+  height: 90%;
+  margin-top: 5%;
+  margin-left: 7.5%;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 `;
