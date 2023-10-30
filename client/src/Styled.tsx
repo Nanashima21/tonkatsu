@@ -207,7 +207,7 @@ export const StyledUserList = styled.div`
 
 export const StyledUserListElem = styled.div`
   flex: 1 1 50%;
-  width: 40%;
+  width: 100%;
   border-bottom: solid 3px #e0e0e0;
   margin: 0 auto;
   padding-top: 15px;

@@ -3,7 +3,7 @@ import { Box, HStack, VStack } from "@chakra-ui/react";
 import { GameState, ResultJson, AllResultJson } from "../views/Game";
 import { setGameCount } from "../app/user/userSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { StyledButton, StyledHr } from "../Styled";
+import { StyledButton, StyledHeader, StyledHr } from "../Styled";
 
 type Props = {
   socketRef: React.MutableRefObject<WebSocket | undefined>;
@@ -125,10 +125,10 @@ export const Result: FC<Props> = (props) => {
     <>
       <VStack>
         <VStack>
-          <h3>順位</h3>
-          <h4>
+          <h3>ターン{gameCount + 1}の順位</h3>
+          <StyledHeader>
             {topic.questioner}さんの回答 : {topic.question}
-          </h4>
+          </StyledHeader>
         </VStack>
         <VStack alignItems="left" py="20px" px="150px" spacing="20px">
           {gameResults.map((gameResult, i) => (

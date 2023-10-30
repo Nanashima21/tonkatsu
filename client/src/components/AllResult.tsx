@@ -74,11 +74,15 @@ export const AllResult: FC<Props> = (props) => {
 
   return (
     <>
-      <VStack>
-        <VStack>
-          <h2>最終順位</h2>
-        </VStack>
-        <VStack alignItems="center" py="20px" px="150px" spacing="20px">
+      <VStack width="100%">
+        <h2>最終順位</h2>
+        <VStack
+          width="100%"
+          alignItems="center"
+          py="20px"
+          px="150px"
+          spacing="20px"
+        >
           {gameResults.map((gameResult, i) => (
             <div style={styles.appeal}>
               {Appeal}
@@ -103,6 +107,8 @@ export const AllResult: FC<Props> = (props) => {
               </style>
 
               <HStack
+                width="100%"
+                justifyContent="space-between"
                 key={i}
                 style={{
                   opacity: `0`,
@@ -117,8 +123,8 @@ export const AllResult: FC<Props> = (props) => {
                 }}
               >
                 <Box width="100px">{gameResult.rank}位</Box>
-                <Box width="300px">{gameResult.userName}</Box>
-                <Box width="200px">{gameResult.score}pt</Box>
+                <Box width="200px">{gameResult.userName}</Box>
+                <Box width="100px">{gameResult.score}pt</Box>
               </HStack>
             </div>
           ))}

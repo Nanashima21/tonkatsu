@@ -207,7 +207,7 @@ export const Answerer: FC<Props> = (props) => {
     case AnswerState.Result:
       return (
         <>
-          <VStack>
+          <VStack width="100%">
             <h5>
               あなたは...
               {isCorrect ? (

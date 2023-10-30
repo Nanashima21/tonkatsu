@@ -2,6 +2,7 @@ import { FC } from "react";
 import { useTypewriter } from "react-simple-typewriter";
 import {
   StyledDescription,
+  StyledHeader,
   StyledUser,
   StyledUserList,
   StyledUserListElem,
@@ -74,7 +75,7 @@ export const CorrectUserList: FC<CorrectUserProps> = (props) => {
 
   return (
     <>
-      <h5>正解者</h5>
+      <StyledHeader style={{ marginTop: 20 }}>正解者</StyledHeader>
       <StyledUserList>{correctUserList}</StyledUserList>
     </>
   );
