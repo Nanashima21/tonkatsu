@@ -278,9 +278,7 @@ export const Questioner: FC<Props> = (props) => {
                       {answerer.isCorrect != 0 ? (
                         <>
                           <StyledAnswer>
-                            <h5>
-                              {answerer.isCorrect == 1 ? "正解！" : "不正解..."}
-                            </h5>
+                            {answerer.isCorrect == 1 ? "正解！" : "不正解..."}
                           </StyledAnswer>
                         </>
                       ) : (
