@@ -19,6 +19,7 @@ import {
   Styledform,
   StyledInput,
   StyledUser,
+  StyledHeader,
 } from "../Styled";
 
 type Props = {
@@ -206,7 +207,7 @@ export const Questioner: FC<Props> = (props) => {
         return (
           <>
             <VStack width="100%">
-              <h4>以下の質問に答えてください</h4>
+              <StyledHeader>以下の質問に答えてください</StyledHeader>
               <h5>質問：{props.topic}</h5>
 
               <Styledform onSubmit={handleSubmit(onSubmit)}>
@@ -252,8 +253,10 @@ export const Questioner: FC<Props> = (props) => {
         <>
           <VStack>
             <VStack>
-              <h5>質問：{props.topic}</h5>
+              <StyledHeader>答え合わせをしてください</StyledHeader>
               <h5 style={{ marginBottom: 20 }}>
+                質問：{props.topic}
+                &nbsp; &nbsp;
                 {props.isQuestioner ? "送信したお題" : "お題"} :{" "}
                 {props.question}
               </h5>
@@ -262,13 +265,7 @@ export const Questioner: FC<Props> = (props) => {
                 isQuestioner={true}
               ></DescriptionList>
             </VStack>
-            <VStack
-              width="100%"
-              alignItems="left"
-              marginLeft="10%"
-              p="20px"
-              spacing="30px"
-            >
+            <VStack width="90%" alignItems="left" p="20px" spacing="30px">
               {answerers.map((answerer, i) => (
                 <HStack key={i}>
                   <VStack spacing={0}>

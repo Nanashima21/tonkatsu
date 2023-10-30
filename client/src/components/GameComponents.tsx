@@ -1,6 +1,12 @@
 import { FC } from "react";
-// import Typical from "react-typical";
-import { StyledUser, StyledUserList, StyledUserListElem } from "../Styled";
+import { useTypewriter } from "react-simple-typewriter";
+import {
+  StyledDescription,
+  StyledUser,
+  StyledUserList,
+  StyledUserListElem,
+} from "../Styled";
+import { VStack } from "@chakra-ui/react";
 
 export type Explanation = {
   description: string;
@@ -17,30 +23,37 @@ type CorrectUserProps = {
 };
 
 export const DescriptionList: FC<DescriptionProps> = (props) => {
-  const descriptionList = [];
+  const descriptionList: JSX.Element[] = [
+    <StyledDescription key={-1} style={{ color: "white", height: "1px" }}>
+      ・{props.explanations[0].description}
+    </StyledDescription>,
+  ];
   for (const [idx, content] of props.explanations.entries()) {
-    // const steps = [content.description, 10];
-
-    if (idx == props.explanations.length - 1 && !props.isQuestioner) {
+    if (idx == props.explanations.length - 1) {
+      const [description] = useTypewriter({
+        words: [content.description],
+        typeSpeed: 100,
+        loop: 1,
+      });
       descriptionList.push(
-        <li>
-          <h5 key={content.index}>{content.description}</h5>
-        </li>
+        <StyledDescription key={content.index} style={{ fontWeight: 800 }}>
+          ・{description}
+        </StyledDescription>
       );
     } else {
       descriptionList.push(
-        <li>
-          <h5 key={content.index}>{content.description}</h5>
-        </li>
+        <StyledDescription key={content.index}>
+          ・{content.description}
+        </StyledDescription>
       );
     }
   }
 
   return (
     <>
-      <div>
-        <ul>{descriptionList}</ul>
-      </div>
+      <VStack width="90%" alignItems="left" textAlign="left">
+        {descriptionList}
+      </VStack>
     </>
   );
 };

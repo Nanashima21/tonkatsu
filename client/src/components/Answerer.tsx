@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { GameState, ResultJson } from "../views/Game";
@@ -13,6 +14,7 @@ import {
   StyledErrorMessage,
   StyledInput,
   StyledHr,
+  StyledHeader,
   Styledform,
 } from "../Styled";
 import "./../index.css";
@@ -129,6 +131,11 @@ export const Answerer: FC<Props> = (props) => {
     reset();
   };
 
+  const navigate = useNavigate();
+  const backHome = function () {
+    navigate("/");
+  };
+
   switch (status) {
     // 出題者の回答待ち
     case AnswerState.WaitQuestionerAnswer:
@@ -142,57 +149,57 @@ export const Answerer: FC<Props> = (props) => {
 
     // 解答を入力するとき
     case AnswerState.SubmittingAnswer:
-      return (
-        <>
-          <VStack overflow="scroll">
-            <h5 style={{ marginBottom: 16 }}>トピック： {props.topic}</h5>
-            <DescriptionList
-              explanations={props.explanations}
-              isQuestioner={false}
-            ></DescriptionList>
-
-            <Styledform onSubmit={handleSubmit(onSubmit)}>
-              <StyledInput
-                id="answer"
-                type="text"
-                {...register("answer", {
-                  required: "解答を入力してください",
-                  maxLength: {
-                    value: 30,
-                    message: "30文字以内で入力してください",
-                  },
-                  pattern: {
-                    value: /^[A-Za-z0-9ぁ-んーァ-ヶーｱ-ﾝﾞﾟ一-龠]+$/i,
-                    message: "入力の形式が不正です",
-                  },
-                })}
-              />
-
-              <StyledErrorMessage>
-                <ErrorMessage
-                  errors={errors}
-                  name="answer"
-                  render={({ message }) => <span>{message}</span>}
-                />
-              </StyledErrorMessage>
-              <StyledButton>送信</StyledButton>
-            </Styledform>
-          </VStack>
-        </>
-      );
-
     case AnswerState.WaitJudge:
       return (
         <>
-          <VStack>
-            <h5 style={{ marginBottom: 16 }}>トピック： {props.topic}</h5>
+          <VStack overflow="scroll">
+            {status === AnswerState.SubmittingAnswer ? (
+              <StyledHeader>質問とヒントからお題を当てましょう</StyledHeader>
+            ) : (
+              <StyledHeader>出題者の判定待ち中...</StyledHeader>
+            )}
+            <h5 style={{ marginBottom: 16 }}>質問 : {props.topic}</h5>
             <DescriptionList
               explanations={props.explanations}
               isQuestioner={false}
             ></DescriptionList>
-            <StyledHr style={{ marginTop: 50, marginBottom: 20 }}></StyledHr>
-            <h5>あなたの解答</h5>
-            <h4>{answer}</h4>
+
+            <StyledHr style={{ margin: 10 }} />
+
+            {status === AnswerState.SubmittingAnswer ? (
+              <>
+                <Styledform onSubmit={handleSubmit(onSubmit)}>
+                  <StyledInput
+                    id="answer"
+                    type="text"
+                    {...register("answer", {
+                      required: "解答を入力してください",
+                      maxLength: {
+                        value: 30,
+                        message: "30文字以内で入力してください",
+                      },
+                      pattern: {
+                        value: /^[A-Za-z0-9ぁ-んーァ-ヶーｱ-ﾝﾞﾟ一-龠]+$/i,
+                        message: "入力の形式が不正です",
+                      },
+                    })}
+                  />
+
+                  <StyledErrorMessage>
+                    <ErrorMessage
+                      errors={errors}
+                      name="answer"
+                      render={({ message }) => <span>{message}</span>}
+                    />
+                  </StyledErrorMessage>
+                  <StyledButton>送信</StyledButton>
+                </Styledform>
+              </>
+            ) : (
+              <>
+                <h5>あなたの解答 : {answer}</h5>
+              </>
+            )}
           </VStack>
         </>
       );
@@ -230,8 +237,7 @@ export const Answerer: FC<Props> = (props) => {
     <>
       <VStack>
         <h4>接続に失敗しました</h4>
-        <StyledButton>戻る</StyledButton>
-        {/* <StyledButton onClick={backHome}>戻る</StyledButton> */}
+        <StyledButton onClick={backHome}>戻る</StyledButton>
       </VStack>
     </>
   );

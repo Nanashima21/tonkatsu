@@ -231,3 +231,15 @@ export const StyledModal = styled.div`
   text-align: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 `;
+
+export const StyledDescription = styled.h5`
+  padding: 0;
+  margin: 0;
+  font-weight: 500;
+`;
+
+export const StyledHeader = styled.h4`
+  padding: 0;
+  margin: 0;
+  font-weight: 800;
+`;
