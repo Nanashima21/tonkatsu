@@ -253,7 +253,11 @@ export const Questioner: FC<Props> = (props) => {
         <>
           <VStack>
             <VStack>
-              <StyledHeader>答え合わせをしてください</StyledHeader>
+              {props.isQuestioner ? (
+                <StyledHeader>答え合わせをしてください</StyledHeader>
+              ) : (
+                <StyledHeader>出題者が答え合わせをしています</StyledHeader>
+              )}
               <h5 style={{ marginBottom: 20 }}>
                 質問：{props.topic}
                 &nbsp; &nbsp;

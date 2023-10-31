@@ -223,10 +223,10 @@ export const StyledModal = styled.div`
   border-radius: 30px;
   position: relative;
   background: #ffffff;
-  width: 85%;
+  width: 60%;
   height: 90%;
-  margin-top: 5%;
-  margin-left: 7.5%;
+  margin-top: 3%;
+  margin-left: 20%;
   padding: 10px;
   text-align: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);

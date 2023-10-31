@@ -89,7 +89,10 @@ export const StandbyGame: FC<Props> = (props) => {
 
   const startGame = function () {
     // ゲームを開始するとき
-    var sendJson = { command: "start_game", content: { game_mode: difficulty + "," + language } };
+    var sendJson = {
+      command: "start_game",
+      content: { game_mode: difficulty + "," + language },
+    };
     socketRef.current?.send(JSON.stringify(sendJson));
   };
 
@@ -227,7 +230,7 @@ export const StandbyGame: FC<Props> = (props) => {
                       setlanguage("english");
                     }}
                   />
-                  <label htmlFor="english">English</label>
+                  <label htmlFor="english">英語</label>
                 </div>
                 <div className="item">
                   <input
@@ -241,7 +244,7 @@ export const StandbyGame: FC<Props> = (props) => {
                       setlanguage("chinese");
                     }}
                   />
-                  <label htmlFor="chinese">中文体</label>
+                  <label htmlFor="chinese">中国語</label>
                 </div>
               </StyledRadioButtonGroup>
             </VStack>
