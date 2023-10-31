@@ -9,8 +9,22 @@ import {
   StyledHr,
   StyledVr,
   StyledRadioButtonGroup,
+  StyledModal,
+  StyledHeader,
 } from "../Styled";
-import { HStack, VStack, Box } from "@chakra-ui/react";
+import {
+  HStack,
+  VStack,
+  Box,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "@chakra-ui/react";
+import { QuestionOutlineIcon } from "@chakra-ui/icons";
 
 type Props = {
   setUserNames: (state: string[]) => void;
@@ -20,6 +34,7 @@ type Props = {
 };
 
 export const StandbyGame: FC<Props> = (props) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const isOwner = useSelector((state: any) => state.user.isOwner);
   const dispatch = useDispatch();
   console.log(isOwner);
@@ -147,11 +162,16 @@ export const StandbyGame: FC<Props> = (props) => {
     <>
       <Box height="100%" overflowY="scroll">
         <VStack width="100%" height="100%" justifyContent="space-between">
-          {isOwner ? (
-            <h4>難易度と言語を選択してください</h4>
-          ) : (
-            <h4>ホストの選択を待機しています</h4>
-          )}
+          <HStack>
+            {isOwner ? (
+              <h4>難易度と言語を選択してください</h4>
+            ) : (
+              <h4>ホストの選択を待機しています</h4>
+            )}
+            <a style={{ cursor: "pointer" }} onClick={onOpen}>
+              <QuestionOutlineIcon boxSize={20} />
+            </a>
+          </HStack>
           <HStack width="100%" gap="5%" marginLeft="15%">
             <VStack width="35%">
               <h4>難易度</h4>
@@ -264,6 +284,52 @@ export const StandbyGame: FC<Props> = (props) => {
           </HStack>
         </VStack>
       </Box>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <StyledModal style={{ marginTop: "8%" }}>
+            <ModalHeader>
+              <h3>難易度について</h3>
+            </ModalHeader>
+            <ModalBody>
+              <h5 style={{ textAlign: "left", paddingLeft: "5%" }}>
+                かんたん : 特に指定はしていません。
+                <br /> <br />
+                &nbsp; &nbsp;
+                例）・食材は豚肉を使い、パン粉で衣を付けて揚げる料理です。
+                <br />
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                ・通常は豚ロースや豚ヒレを使用し、薄くスライスして調理されます。
+              </h5>
+              <h5 style={{ textAlign: "left", paddingLeft: "5%" }}>
+                ふつう : 「極めて抽象的に記述してください。」と指定しています。
+                <br /> <br />
+                &nbsp; &nbsp; 例）・柔らかい肉を衣で包み、揚げる料理。
+                <br />
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                ・香ばしくて外側はサクサク、内側はジューシーな食感。
+              </h5>
+              <h5 style={{ textAlign: "left", paddingLeft: "5%" }}>
+                むずかしい :
+                「極めて抽象的に、分かりにくく記述してください。」と指定しています。
+                <br /> <br />
+                &nbsp; &nbsp;
+                例）・通常はタレやソースをつけて食べるが、その他の調味料とも相性が良い。
+                <br />
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                ・日本の伝統的な食文化において重要な位置を占め、多くの食事の一部として愛されている。
+              </h5>
+            </ModalBody>
+
+            <ModalFooter>
+              <StyledButton style={{ width: 100 }} onClick={onClose}>
+                閉じる
+              </StyledButton>
+            </ModalFooter>
+          </StyledModal>
+        </ModalContent>
+      </Modal>
     </>
   );
 };
