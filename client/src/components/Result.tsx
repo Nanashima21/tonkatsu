@@ -3,7 +3,7 @@ import { Box, HStack, VStack } from "@chakra-ui/react";
 import { GameState, ResultJson, AllResultJson } from "../views/Game";
 import { setGameCount } from "../app/user/userSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { StyledButton, StyledHr, StyledPage, StyledScreen } from "../Styled";
+import { StyledButton, StyledHeader, StyledHr } from "../Styled";
 
 type Props = {
   socketRef: React.MutableRefObject<WebSocket | undefined>;
@@ -71,8 +71,7 @@ export const Result: FC<Props> = (props) => {
               if (msg["content"]["isQuestioner"]) {
                 props.setGameState(GameState.Questioner);
                 props.setTopic(props.resetTopic());
-              }
-              else props.setGameState(GameState.Answerer);
+              } else props.setGameState(GameState.Answerer);
               break;
             case "game_disconnect":
               props.moveError();
@@ -80,7 +79,7 @@ export const Result: FC<Props> = (props) => {
           }
         };
       }
-      
+
       const objTopic: Topic = {
         questioner: props.result["content"]["questioner"],
         question: props.result["content"]["question"],
@@ -124,42 +123,48 @@ export const Result: FC<Props> = (props) => {
 
   return (
     <>
-      <StyledPage>
-        <StyledScreen>
-          <VStack>
-            <h3>順位</h3>
-            <h4>
-              {topic.questioner}さんの回答 : {topic.question}
-            </h4>
-          </VStack>
-          <VStack alignItems="left" py="20px" px="150px" spacing="20px">
-            {gameResults.map((gameResult, i) => (
-              <HStack key={i}>
-                <Box width="50px"><h5>{gameResult.rank}位</h5></Box>
-                <Box width="200px"><h5>{gameResult.userName}</h5></Box>
-                <Box width="50px"><h5>{gameResult.score}pt</h5></Box>
-              </HStack>
-            ))}
-          </VStack>
-          {isLast ? (
-            <>
-              <StyledHr />
-              <StyledButton onClick={finish_game}>最終結果を見る</StyledButton>
-            </>
-          ) : (
-            <>
-              {props.isQuestioner ? (
-                <>
-                  <StyledHr />
-                  <StyledButton onClick={next_question}>次の問題に移る</StyledButton>
-                </>
-              ) : (
-                <></>
-              )}
-            </>
-          )}
-        </StyledScreen>
-      </StyledPage>
+      <VStack>
+        <VStack>
+          <h3>ターン{gameCount + 1}の順位</h3>
+          <StyledHeader>
+            {topic.questioner}さんの回答 : {topic.question}
+          </StyledHeader>
+        </VStack>
+        <VStack alignItems="left" py="20px" px="150px" spacing="20px">
+          {gameResults.map((gameResult, i) => (
+            <HStack key={i}>
+              <Box width="50px">
+                <h5>{gameResult.rank}位</h5>
+              </Box>
+              <Box width="200px">
+                <h5>{gameResult.userName}</h5>
+              </Box>
+              <Box width="50px">
+                <h5>{gameResult.score}pt</h5>
+              </Box>
+            </HStack>
+          ))}
+        </VStack>
+        {isLast ? (
+          <>
+            <StyledHr />
+            <StyledButton onClick={finish_game}>最終結果を見る</StyledButton>
+          </>
+        ) : (
+          <>
+            {props.isQuestioner ? (
+              <>
+                <StyledHr />
+                <StyledButton onClick={next_question}>
+                  次の問題に移る
+                </StyledButton>
+              </>
+            ) : (
+              <></>
+            )}
+          </>
+        )}
+      </VStack>
     </>
   );
 };

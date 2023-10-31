@@ -3,7 +3,15 @@ import { useCookies } from "react-cookie";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { Link, useNavigate } from "react-router-dom";
-import { StyledButton, StyledPage, StyledForm, StyledErrorMessage, StyledInput, StyledMessage } from "../Styled";
+import {
+  StyledButton,
+  StyledForm,
+  StyledErrorMessage,
+  StyledInput,
+  StyledMessage,
+  StyledLogo,
+} from "../Styled";
+import { Box } from "@chakra-ui/react";
 
 type Props = {
   isLogin: boolean;
@@ -18,7 +26,7 @@ export const LoginForm: FC<Props> = (props) => {
   const navigate = useNavigate();
 
   const [errorMsg, setErrorMsg] = useState<string>("");
-  const [cookies, setCookie] = useCookies(["userID"]);
+  const [, setCookie] = useCookies(["userID"]);
 
   const {
     register,
@@ -33,7 +41,7 @@ export const LoginForm: FC<Props> = (props) => {
     console.log(data.userName);
     console.log(data.password);
     const xmlHttpRequest = new XMLHttpRequest();
-    xmlHttpRequest.withCredentials = true
+    xmlHttpRequest.withCredentials = true;
     let url;
     if (props.isLogin) {
       url = "http://localhost:8000/login";
@@ -74,8 +82,9 @@ export const LoginForm: FC<Props> = (props) => {
 
   return (
     <>
-      <StyledPage>
+      <Box minWidth="450px" maxWidth="900px" height="100%" width="50%" marginX="auto">
         <StyledForm>
+          <StyledLogo src="/src/assets/logo.png"></StyledLogo>
           {props.isLogin ? <h4>ログイン</h4> : <h4>新規登録</h4>}
           <form
             action={props.isLogin ? "/" : "/account"}
@@ -150,7 +159,7 @@ export const LoginForm: FC<Props> = (props) => {
             </StyledMessage>
           )}
         </StyledForm>
-      </StyledPage>
+      </Box>
     </>
   );
 };

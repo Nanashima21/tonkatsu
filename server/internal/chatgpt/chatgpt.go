@@ -102,21 +102,23 @@ func CallChatGPT(message string) string {
 }
 
 func AskChatGPT(keyword string, gamemode string) []string {
+	gamemodeArray := strings.Split(gamemode, ",")
 	var prompt string
-	switch gamemode {
+	switch gamemodeArray[0] {
 	case "normal":
-		prompt = "[[KEYWORD]]に関する説明を5箇条で書いてください。日本語で書いてください。極めて抽象的に記述してください。[[KEYWORD]]という言葉は絶対に使わないでください。"
-
-	case "easy":
-		prompt = "[[KEYWORD]]に関する説明を5箇条で書いてください。日本語で書いてください。[[KEYWORD]]という言葉は絶対に使わないでください。"
+		prompt = "[[KEYWORD]]に関する説明を5箇条で書いてください。極めて抽象的に記述してください。[[KEYWORD]]という言葉は絶対に使わないでください。"
 	case "hard":
-		prompt = "[[KEYWORD]]に関する説明を5箇条で書いてください。日本語で書いてください。極めて抽象的に記述してください。[[KEYWORD]]という言葉は絶対に使わないでください。分かりにくく書いてください。"
-	case "chinese":
-		prompt = "[[KEYWORD]]に関する説明を5箇条で書いてください。中国語で書いてください。[[KEYWORD]]という言葉は絶対に使わないでください。"
-	case "english":
-		prompt = "[[KEYWORD]]に関する説明を5箇条で書いてください。英語で書いてください。[[KEYWORD]]という言葉は絶対に使わないでください。"
+		prompt = "[[KEYWORD]]に関する説明を5箇条で書いてください。極めて抽象的に記述してください。[[KEYWORD]]という言葉は絶対に使わないでください。分かりにくく書いてください。"
 	default:
-		prompt = "[[KEYWORD]]に関する説明を5箇条で書いてください。日本語で書いてください。極めて抽象的に記述してください。[[KEYWORD]]という言葉は絶対に使わないでください。"
+		prompt = "[[KEYWORD]]に関する説明を5箇条で書いてください。[[KEYWORD]]という言葉は絶対に使わないでください。"
+	}
+	switch gamemodeArray[1] {
+	case "chinese":
+		prompt += "中国語で書いてください。"
+	case "english":
+		prompt += "英語で書いてください。"
+	default:
+		prompt += "日本語で書いてください。"
 	}
 	prompt = strings.Replace(prompt, "[[KEYWORD]]", keyword, -1)
 

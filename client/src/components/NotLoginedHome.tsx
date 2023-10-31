@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { StyledButton, StyledPage, StyledForm, StyledHr, StyledLogo } from "../Styled";
+import { StyledButton, StyledForm, StyledHr, StyledLogo } from "../Styled";
 import { Box } from "@chakra-ui/react";
 
 export const NotLoginedHome = () => {
@@ -15,10 +15,14 @@ export const NotLoginedHome = () => {
 
   return (
     <>
-      <StyledPage>
+      <Box minWidth="450px" maxWidth="900px" height="100%" width="50%" marginX="auto">
         <StyledForm>
-          <StyledLogo style={{width: 300}} src="/src/assets/logo.png"></StyledLogo>
-          <Box fontFamily="arial black">会話が苦手でも、Tonkatsuがあれば全然大丈夫!</Box>
+          <StyledLogo src="/src/assets/logo.png"></StyledLogo>
+          <Box fontFamily="arial black" p="10px">
+            会話が苦手でも、Tonkatsuがあれば全然大丈夫!
+            <br />
+            ChatGPTを使ってアイスブレイクをしよう!!
+          </Box>
           <StyledHr />
           <div>
             <StyledButton onClick={handleClickLogin}>ログイン</StyledButton>
@@ -27,7 +31,7 @@ export const NotLoginedHome = () => {
             <StyledButton onClick={handleClickRegister}>新規登録</StyledButton>
           </div>
         </StyledForm>
-      </StyledPage>
+      </Box>
     </>
   );
 };

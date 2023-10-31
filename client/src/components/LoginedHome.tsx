@@ -1,11 +1,19 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useCookies } from "react-cookie";
 import { ErrorMessage } from "@hookform/error-message";
 import { useDispatch } from "react-redux";
 import { becomeOwner, createRoom } from "../app/user/userSlice";
-import { StyledButton, StyledPage, StyledForm, StyledErrorMessage, StyledInput, StyledHr, StyledLogo } from "../Styled";
+import {
+  StyledButton,
+  StyledForm,
+  StyledErrorMessage,
+  StyledInput,
+  StyledHr,
+  StyledLogo,
+} from "../Styled";
+import { Box } from "@chakra-ui/react";
 
 type RoomId = {
   id: string;
@@ -15,7 +23,7 @@ export const LoginedHome = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = useState<string>("");
-  const [cookies, setCookie, removeCookie] = useCookies(["userID"]);
+  const [cookies, , removeCookie] = useCookies(["userID"]);
 
   const {
     handleSubmit,
@@ -40,7 +48,7 @@ export const LoginedHome = () => {
 
   const createButton = () => {
     const xmlHttpRequest = new XMLHttpRequest();
-    xmlHttpRequest.withCredentials = true
+    xmlHttpRequest.withCredentials = true;
     let url = "http://localhost:8000/room";
     xmlHttpRequest.open("POST", url);
     xmlHttpRequest.send();
@@ -69,18 +77,18 @@ export const LoginedHome = () => {
     xmlHttpRequest.withCredentials = true;
     let url = "http://localhost:8000/logout";
     xmlHttpRequest.open("POST", url);
-    xmlHttpRequest.send()
+    xmlHttpRequest.send();
 
     xmlHttpRequest.onreadystatechange = () => {
-      navigate("/")
-    }
+      navigate("/");
+    };
   };
 
   return (
     <>
-      <StyledPage>
+      <Box minWidth="450px" maxWidth="900px" height="100%" width="50%" marginX="auto">
         <StyledForm>
-          <StyledLogo style={{width: 300}} src="/src/assets/logo.png"></StyledLogo>
+          <StyledLogo src="/src/assets/logo.png"></StyledLogo>
           <h5>userID : {cookies.userID}</h5>
           <form onSubmit={handleSubmit(joinButton)}>
             <div>
@@ -118,7 +126,7 @@ export const LoginedHome = () => {
             <StyledButton onClick={logout}>ログアウト</StyledButton>
           </div>
         </StyledForm>
-      </StyledPage>
+      </Box>
     </>
   );
 };
