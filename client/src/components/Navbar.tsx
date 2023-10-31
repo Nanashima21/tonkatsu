@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { StyledButton, StyledNavbar } from "../Styled";
+import {
+  StyledButton,
+  StyledNavbar,
+  StyledModal,
+  StyledHeader,
+} from "../Styled";
 import {
   Box,
   Modal,
@@ -12,7 +17,6 @@ import {
   HStack,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import { StyledModal, StyledHeader } from "../Styled";
 
 export const Navbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
